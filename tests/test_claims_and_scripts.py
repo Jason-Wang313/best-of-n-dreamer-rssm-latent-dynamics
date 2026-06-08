@@ -16,6 +16,7 @@ def test_script_contracts_reference_required_experiments():
         assert "experiments/exact_law_validation.py" in text
         assert "experiments/experiment_a_toy_mismatch.py" in text
         assert "experiments/experiment_b_learned_rssm.py" in text
+        assert "experiments/multiseed_evidence.py" in text
         assert "scripts/run_claim_audit.py" in text
     for text in [smoke, full]:
         assert "scripts.run_suite" in text

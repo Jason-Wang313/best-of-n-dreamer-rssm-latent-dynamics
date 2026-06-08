@@ -18,6 +18,8 @@ def main() -> None:
     (root / "results" / "claims_status.md").write_text(claim_status_markdown(payload), encoding="utf-8")
     if payload["unsupported_count"] > 0:
         raise SystemExit(f"claim audit found {payload['unsupported_count']} unsupported claim(s)")
+    if payload.get("full_multiseed_evidence") and payload.get("weak_count", 0) > 0:
+        raise SystemExit(f"claim audit found {payload['weak_count']} weak strong-evidence check(s)")
 
 
 if __name__ == "__main__":

@@ -3,26 +3,26 @@
   "key_result": {
     "raw_latent_delta_high_n": 0.9096208484136521,
     "raw_real_delta_high_n": -1.2699841955047155,
-    "repair_n64_real_improvement_over_raw": 4.147042004688714
+    "repair_n64_real_improvement_over_raw": 3.855432703253144
   },
   "model_artifact": "results\\learned_tiny_rssm.pt",
   "n_records": 760,
-  "pilot_size": 120,
+  "pilot_size": 220,
   "scorers": {
     "combined_repair": {
-      "N64_latent": 2.391007214383731,
-      "N64_real": 2.0829689705046923,
-      "latent_delta_high_n": -0.24269991865674712,
-      "real_delta_high_n": 2.8770578091839925,
+      "N64_latent": 2.3164261885765853,
+      "N64_real": 1.7913596690691223,
+      "latent_delta_high_n": -0.31728094446389443,
+      "real_delta_high_n": 2.585448507748425,
       "tail": {
         "population_latent_mean": 2.6337071330404793,
         "population_real_mean": -0.794088838679301,
-        "tail_blocked_rate": 0.3026315789473684,
-        "tail_gap": 0.24294219119161098,
-        "tail_imagined_free_prob": 0.7235877934302021,
-        "tail_latent_mean": 2.2280052777867,
-        "tail_real_mean": 1.985063086595089,
-        "tail_uncertainty_mean": 0.9021355194446364,
+        "tail_blocked_rate": 0.3815789473684211,
+        "tail_gap": 0.37283106771894214,
+        "tail_imagined_free_prob": 0.7029686690803925,
+        "tail_latent_mean": 2.0807099504316904,
+        "tail_real_mean": 1.7078788827127482,
+        "tail_uncertainty_mean": 0.8768357538034642,
         "top_fraction": 0.1
       }
     },
@@ -44,19 +44,19 @@
       }
     },
     "pilot_calibrated": {
-      "N64_latent": 2.5942351439806166,
-      "N64_real": 2.5881118051822747,
-      "latent_delta_high_n": -0.03947198905985827,
-      "real_delta_high_n": 3.3822006438615766,
+      "N64_latent": 2.4399238203248634,
+      "N64_real": 2.1063107572680164,
+      "latent_delta_high_n": -0.1937833127156141,
+      "real_delta_high_n": 2.900399595947316,
       "tail": {
         "population_latent_mean": 2.6337071330404793,
         "population_real_mean": -0.794088838679301,
-        "tail_blocked_rate": 0.3026315789473684,
-        "tail_gap": 0.24348748840920642,
-        "tail_imagined_free_prob": 0.7327119867782684,
-        "tail_latent_mean": 2.2929175607951855,
-        "tail_real_mean": 2.049430072385979,
-        "tail_uncertainty_mean": 0.9145199275827977,
+        "tail_blocked_rate": 0.35526315789473684,
+        "tail_gap": 0.3248768722113089,
+        "tail_imagined_free_prob": 0.7100237760808944,
+        "tail_latent_mean": 2.130985293946058,
+        "tail_real_mean": 1.8061084217347492,
+        "tail_uncertainty_mean": 0.8855874092211915,
         "top_fraction": 0.1
       }
     },

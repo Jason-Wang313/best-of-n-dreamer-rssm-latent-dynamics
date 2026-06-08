@@ -26,19 +26,19 @@
       }
     },
     "combined_repair": {
-      "N64_latent": 10.20184231515122,
-      "N64_real": 2.0000804601958424,
-      "latent_delta_high_n": 1.0345942927720895,
-      "real_delta_high_n": 2.9133083759124605,
+      "N64_latent": 9.753653752374454,
+      "N64_real": 2.000117099642872,
+      "latent_delta_high_n": 0.5864057299953149,
+      "real_delta_high_n": 2.9133450153594818,
       "tail": {
         "population_latent_mean": 9.16724802237911,
         "population_real_mean": -0.9132279157166147,
-        "tail_blocked_rate": 0.5,
-        "tail_gap": 5.746201005977796,
-        "tail_imagined_free_prob": 0.8365610153762129,
-        "tail_latent_mean": 6.9502918419397375,
-        "tail_real_mean": 1.204090835961941,
-        "tail_uncertainty_mean": 0.27555216496742496,
+        "tail_blocked_rate": 0.50625,
+        "tail_gap": 5.987898915785004,
+        "tail_imagined_free_prob": 0.8321249731753031,
+        "tail_latent_mean": 6.984417183637584,
+        "tail_real_mean": 0.9965182678525804,
+        "tail_uncertainty_mean": 0.2599230500704988,
         "top_fraction": 0.1
       }
     },

@@ -25,6 +25,7 @@ The scripts write results under `results/` and figures under `figures/`.
 - `figures/figure4_horizon_budget.png`: horizon and selection-budget sweep.
 - `figures/figure5_exact_law_validation.png`: exact finite law versus Monte Carlo.
 - `results/claims_status.md`: claim audit with `SUPPORTED`, `PARTIAL`, and `UNSUPPORTED` statuses.
+- `results/multiseed_strong_evidence.json`: seed-level effect-size evidence used by the strict claim audit.
 - `results/learned_tiny_rssm.pt`: small trained RSSM-style PyTorch artifact.
 
 ## What Is Reused From WAM
@@ -38,3 +39,5 @@ Everything scientific here is different: RSSM-like belief states, stochastic lat
 This repo does not claim to solve Dreamer or model-based reinforcement learning. It does not claim that larger `N` is always harmful or always helpful. It does not claim uncertainty is a universal repair. It does not include real-robot evidence, full Dreamer benchmarks, or external RL benchmark suites.
 
 The intended use is as a compact research scaffold for studying selected-tail failures in latent imagination and for testing whether architecture-aware diagnostics can make high-`N` planning safer.
+
+The full claim audit requires every paper-level claim to clear strong evidence checks: multi-seed selected-tail effect sizes, repair margins, explicit scope boundaries, and forbidden-overclaim scanning. Smoke runs use smaller artifacts for speed; run `bash scripts/run_all.sh` before publication-style inspection.

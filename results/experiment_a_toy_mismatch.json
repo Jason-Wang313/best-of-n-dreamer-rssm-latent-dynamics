@@ -2,13 +2,13 @@
   "claim": "Increasing N raises imagined latent value while selected real utility stagnates or worsens for raw/collapsed latent scoring.",
   "experiment": "A_controlled_latent_dynamics_toy",
   "key_result": {
-    "oracle_gap_after_repair_n64": 2.0736883098844263,
+    "oracle_gap_after_repair_n64": 1.6988332707172815,
     "raw_latent_delta_high_n": 5.359714275668951,
     "raw_real_delta_high_n": -2.0235706125713673,
-    "repair_n64_real_improvement_over_raw": 5.779935389901926
+    "repair_n64_real_improvement_over_raw": 6.15479042906907
   },
   "n_records": 1800,
-  "pilot_size": 128,
+  "pilot_size": 360,
   "scorers": {
     "belief_collapsed": {
       "N64_latent": 13.019472216006614,
@@ -28,19 +28,19 @@
       }
     },
     "combined_repair": {
-      "N64_latent": 8.903439054209452,
-      "N64_real": 3.277130176542766,
-      "latent_delta_high_n": 1.2436811138717738,
-      "real_delta_high_n": 3.7563647773305457,
+      "N64_latent": 8.984749497846277,
+      "N64_real": 3.6519852157099106,
+      "latent_delta_high_n": 1.3249915575086133,
+      "real_delta_high_n": 4.131219816497691,
       "tail": {
         "population_latent_mean": 7.659757940337664,
         "population_real_mean": -0.47923460078778385,
-        "tail_blocked_rate": 0.2111111111111111,
-        "tail_gap": 4.5654620699485005,
-        "tail_imagined_free_prob": 0.8606295746103939,
-        "tail_latent_mean": 6.835103952953941,
-        "tail_real_mean": 2.2696418830054403,
-        "tail_uncertainty_mean": 0.353901523382142,
+        "tail_blocked_rate": 0.10555555555555556,
+        "tail_gap": 4.66994725311468,
+        "tail_imagined_free_prob": 0.8644633142466142,
+        "tail_latent_mean": 7.196851299458205,
+        "tail_real_mean": 2.526904046343525,
+        "tail_uncertainty_mean": 0.35359670263673276,
         "top_fraction": 0.1
       }
     },

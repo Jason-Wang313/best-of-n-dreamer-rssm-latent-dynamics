@@ -36,6 +36,24 @@ def run(smoke: bool = False, seed: int = 3):
         "horizons": horizons,
         "n_grid": N_GRID,
         "summary_by_horizon": horizon_summary,
+        "key_result": {
+            "shortest_horizon_raw_real_delta": horizon_summary[str(horizons[0])]["scorers"]["belief_collapsed"][
+                "real_delta_high_n"
+            ],
+            "longest_horizon_raw_real_delta": horizon_summary[str(horizons[-1])]["scorers"]["belief_collapsed"][
+                "real_delta_high_n"
+            ],
+            "shortest_horizon_raw_latent_delta": horizon_summary[str(horizons[0])]["scorers"]["belief_collapsed"][
+                "latent_delta_high_n"
+            ],
+            "longest_horizon_raw_latent_delta": horizon_summary[str(horizons[-1])]["scorers"]["belief_collapsed"][
+                "latent_delta_high_n"
+            ],
+            "longest_horizon_repair_n64_improvement_over_raw": horizon_summary[str(horizons[-1])]["scorers"][
+                "combined_repair"
+            ]["N64_real"]
+            - horizon_summary[str(horizons[-1])]["scorers"]["belief_collapsed"]["N64_real"],
+        },
         "claim": "Longer horizons and larger N amplify latent-real mismatch under optimistic latent scoring.",
     }
     write_json(root / "results" / "experiment_d_horizon_budget.json", summary)

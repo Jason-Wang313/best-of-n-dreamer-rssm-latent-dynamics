@@ -26,7 +26,7 @@ def run(smoke: bool = False, seed: int = 1):
         records,
         ["raw_value", "uncertainty_pessimism", "pilot_calibrated", "combined_repair", "random", "oracle"],
         N_GRID,
-        pilot_size=48 if smoke else 120,
+        pilot_size=80 if smoke else 220,
         seed=seed,
     )
     records_to_frame(records).to_csv(root / "results" / "tables" / "experiment_b_learned_pool.csv", index=False)

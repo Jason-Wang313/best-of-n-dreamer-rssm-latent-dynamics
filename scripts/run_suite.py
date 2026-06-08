@@ -10,6 +10,7 @@ from experiments.experiment_b_learned_rssm import run as run_b
 from experiments.experiment_c_belief_collapse import run as run_c
 from experiments.experiment_d_horizon_budget import run as run_d
 from experiments.experiment_e_repairs import run as run_e
+from experiments.multiseed_evidence import run as run_multiseed
 from experiments.tail_diagnostics import run as run_tail
 from scripts.run_claim_audit import main as run_claim_audit
 
@@ -35,6 +36,7 @@ def main() -> None:
         ("experiments/experiment_d_horizon_budget.py", lambda: run_d(smoke=args.smoke, seed=seeds["d"])),
         ("experiments/experiment_e_repairs.py", lambda: run_e(smoke=args.smoke, seed=seeds["e"])),
         ("experiments/tail_diagnostics.py", lambda: run_tail(smoke=args.smoke, seed=seeds["a"])),
+        ("experiments/multiseed_evidence.py", lambda: run_multiseed(smoke=args.smoke, seed=args.seed_base + 100)),
     ]
     for label, fn in steps:
         print(f"[suite] running {label}", flush=True)

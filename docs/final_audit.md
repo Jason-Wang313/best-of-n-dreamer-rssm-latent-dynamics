@@ -17,7 +17,8 @@ Expected generated artifacts:
 - `results/experiment_c_belief_collapse.json`
 - `results/experiment_d_horizon_budget.json`
 - `results/experiment_e_repairs.json`
+- `results/multiseed_strong_evidence.json`
 - `results/claims_status.json`
 - five required figures under `figures/`
 
-The claim audit is intentionally conservative. It allows partial repair or learned-model claims when evidence exists but thresholds are not strong enough for a full support label.
+The claim audit is intentionally conservative. Full runs fail if a paper-level claim lacks strong multi-seed support, if a forbidden overclaim appears in docs or paper files, or if any claim is unsupported.

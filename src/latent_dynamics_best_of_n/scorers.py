@@ -33,15 +33,34 @@ def _arr(records: Iterable[RolloutRecord], attr: str) -> np.ndarray:
 def feature_matrix(records: list[RolloutRecord]) -> np.ndarray:
     """Features available to the pilot calibration repair."""
 
+    value = _arr(records, "value_pred")
+    uncertainty = _arr(records, "uncertainty")
+    pp_kl = _arr(records, "posterior_prior_kl")
+    decoder = _arr(records, "decoder_error")
+    belief = _arr(records, "belief_error")
+    risk = _arr(records, "risk")
+    posterior_free = _arr(records, "posterior_free_prob")
+    imagined_free = _arr(records, "imagined_free_prob")
+    hallucinated_free = np.maximum(0.0, imagined_free - posterior_free)
     return np.column_stack(
         [
             np.ones(len(records)),
-            _arr(records, "value_pred"),
-            _arr(records, "uncertainty"),
-            _arr(records, "posterior_prior_kl"),
-            _arr(records, "decoder_error"),
-            _arr(records, "belief_error"),
-            _arr(records, "risk"),
+            value,
+            uncertainty,
+            pp_kl,
+            decoder,
+            belief,
+            risk,
+            risk**2,
+            posterior_free,
+            imagined_free,
+            posterior_free * risk,
+            hallucinated_free * risk,
+            uncertainty * risk,
+            decoder * risk,
+            pp_kl * risk,
+            posterior_free * risk**2,
+            (1.0 - posterior_free) * risk**2,
         ]
     )
 
@@ -57,7 +76,7 @@ class PilotCalibrator:
         return feature_matrix(records) @ self.weights
 
 
-def fit_pilot_calibrator(records: list[RolloutRecord], ridge: float = 1e-3) -> PilotCalibrator:
+def fit_pilot_calibrator(records: list[RolloutRecord], ridge: float = 1.0) -> PilotCalibrator:
     """Fit real utility from latent diagnostics on a small pilot set."""
 
     x = feature_matrix(records)
@@ -105,5 +124,5 @@ def score_records(
         return calibrator.predict(records)
     if scorer == "combined_repair":
         base = calibrator.predict(records) if calibrator is not None else raw
-        return base - penalty_scale * (0.80 * uncertainty + 0.80 * pp_kl + 0.70 * decoder + 0.35 * belief)
+        return base - penalty_scale * (0.30 * uncertainty + 0.30 * pp_kl + 0.25 * decoder + 0.15 * belief)
     raise AssertionError("unreachable scorer")

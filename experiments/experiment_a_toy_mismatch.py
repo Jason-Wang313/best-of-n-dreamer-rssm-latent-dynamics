@@ -18,7 +18,7 @@ def run(smoke: bool = False, seed: int = 0):
         model_flavor="belief_collapsed",
     )
     scorers = ["random", "good", "overconfident", "value_optimistic", "belief_collapsed", "combined_repair", "oracle"]
-    rows, summary = evaluate_scorers(records, scorers, N_GRID, pilot_size=64 if smoke else 128, seed=seed)
+    rows, summary = evaluate_scorers(records, scorers, N_GRID, pilot_size=120 if smoke else 360, seed=seed)
     records_to_frame(records).to_csv(root / "results" / "tables" / "experiment_a_candidate_pool.csv", index=False)
     import pandas as pd
 

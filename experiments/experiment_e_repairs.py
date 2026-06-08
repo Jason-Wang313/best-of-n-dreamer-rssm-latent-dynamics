@@ -27,7 +27,7 @@ def run(smoke: bool = False, seed: int = 4):
         "random",
         "oracle",
     ]
-    rows, summary = evaluate_scorers(records, scorers, N_GRID, pilot_size=72 if smoke else 140, seed=seed)
+    rows, summary = evaluate_scorers(records, scorers, N_GRID, pilot_size=220 if smoke else 1000, seed=seed)
     import pandas as pd
 
     pd.DataFrame(rows).to_csv(root / "results" / "tables" / "experiment_e_repairs.csv", index=False)
