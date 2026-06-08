@@ -1,0 +1,3 @@
+# Abstract
+
+Latent world models often plan by imagining many futures and selecting the one with the highest predicted value. We study a failure mode of this Best-of-N procedure in RSSM-style latent dynamics: selected imagined value can improve with the number of imagined candidates while selected executed utility stagnates or worsens. We give a finite tie-aware selection law for measuring the effect exactly on empirical candidate pools, then apply it to hidden-mode toy dynamics and a small learned RSSM-style model. Diagnostics based on uncertainty, posterior-prior disagreement, decoder consistency, and pilot-calibrated value recover substantial selected-tail utility in controlled settings. The evidence is CPU-scale and intentionally bounded.

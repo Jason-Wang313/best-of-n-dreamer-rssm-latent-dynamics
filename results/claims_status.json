@@ -1,0 +1,86 @@
+{
+  "all_supported_or_partial": true,
+  "claims": [
+    {
+      "category": "theorem claims",
+      "claim": "The finite tie-aware Best-of-N law exactly predicts selected utility from an empirical score/utility pool; Monte Carlo agrees within sampling error.",
+      "evidence": "results/exact_law_validation.json",
+      "status": "SUPPORTED"
+    },
+    {
+      "category": "controlled latent dynamics claims",
+      "claim": "In the controlled hidden-mode toy, high N can inflate selected imagined latent value while selected executed real utility stagnates or drops.",
+      "evidence": "results/experiment_a_toy_mismatch.json; figures/figure1_latent_mismatch.png",
+      "status": "SUPPORTED"
+    },
+    {
+      "category": "learned RSSM-style claims",
+      "claim": "A CPU-trained small RSSM-style model with encoder, recurrent state, stochastic prior/posterior, decoder, reward head, and value head reproduces the latent-real selection mismatch in a smoke-scale learned setting.",
+      "evidence": "results/experiment_b_learned_rssm.json; results/learned_tiny_rssm.pt",
+      "status": "SUPPORTED"
+    },
+    {
+      "category": "hidden-mode belief-collapse claims",
+      "claim": "Under ambiguous hidden modes, high-N latent selection concentrates in optimistic imagined modes even when many selected candidates execute in blocked/slip/heavy modes.",
+      "evidence": "results/experiment_c_belief_collapse.json",
+      "status": "SUPPORTED"
+    },
+    {
+      "category": "horizon/selection-budget claims",
+      "claim": "Varying N and H shows where longer or fatter imagination worsens latent-real mismatch.",
+      "evidence": "results/experiment_d_horizon_budget.json; figures/figure4_horizon_budget.png",
+      "status": "SUPPORTED"
+    },
+    {
+      "category": "repair claims",
+      "claim": "RSSM-specific repairs can substantially recover selected-tail real utility over raw latent value selection; near-oracle is reported only when achieved.",
+      "evidence": "results/experiment_e_repairs.json; figures/figure2_repair_comparison.png",
+      "oracle_gap_fraction_closed": 0.4652304954066074,
+      "repair_gain": 3.5773674518527248,
+      "status": "SUPPORTED"
+    },
+    {
+      "category": "optional benchmark claims",
+      "claim": "No external benchmark, full Dreamer benchmark, or real-world robotic benchmark is implemented in this repo.",
+      "evidence": "Repository scope and scripts are toy/RSSM-style CPU experiments only.",
+      "status": "SUPPORTED"
+    },
+    {
+      "category": "unsupported robotics claims",
+      "claim": "Real robot validation is unsupported and must not be claimed.",
+      "evidence": "No robot datasets, robot execution adapters, or robot result artifacts exist.",
+      "status": "SUPPORTED"
+    },
+    {
+      "category": "forbidden overclaims",
+      "claim": "Forbidden universal or real-robot claims are blocked.",
+      "evidence": {
+        "blocked_phrases": [
+          "We solve Dreamer.",
+          "We solve model-based RL.",
+          "Best-of-N always hurts.",
+          "More imagination always helps.",
+          "Uncertainty always fixes the issue.",
+          "We validate on real robots.",
+          "This is not toy evidence",
+          "This is just a renamed WAM project."
+        ],
+        "forbidden_hits": []
+      },
+      "status": "SUPPORTED"
+    }
+  ],
+  "forbidden_claims": [
+    "We solve Dreamer.",
+    "We solve model-based RL.",
+    "Best-of-N always hurts.",
+    "More imagination always helps.",
+    "Uncertainty always fixes the issue.",
+    "We validate on real robots.",
+    "This is not toy evidence",
+    "This is just a renamed WAM project."
+  ],
+  "project": "When Latent Imagination Lies",
+  "schema_version": 1,
+  "unsupported_count": 0
+}

@@ -1,0 +1,80 @@
+{
+  "experiment": "C_hidden_mode_belief_collapse",
+  "key_result": {
+    "raw_real_delta_high_n": -1.3405403730468535,
+    "raw_tail_blocked_rate": 0.725,
+    "raw_tail_imagined_free_prob": 0.9640077610531386
+  },
+  "n_records": 1600,
+  "pilot_size": 96,
+  "scorers": {
+    "belief_collapsed": {
+      "N64_latent": 15.5809561865103,
+      "N64_real": -2.2537682887634696,
+      "latent_delta_high_n": 6.413708164131194,
+      "real_delta_high_n": -1.3405403730468535,
+      "tail": {
+        "population_latent_mean": 9.16724802237911,
+        "population_real_mean": -0.9132279157166147,
+        "tail_blocked_rate": 0.725,
+        "tail_gap": 17.859717475186635,
+        "tail_imagined_free_prob": 0.9640077610531386,
+        "tail_latent_mean": 15.010736503996924,
+        "tail_real_mean": -2.84898097118971,
+        "tail_uncertainty_mean": 1.0494144690440885,
+        "top_fraction": 0.1
+      }
+    },
+    "combined_repair": {
+      "N64_latent": 10.20184231515122,
+      "N64_real": 2.0000804601958424,
+      "latent_delta_high_n": 1.0345942927720895,
+      "real_delta_high_n": 2.9133083759124605,
+      "tail": {
+        "population_latent_mean": 9.16724802237911,
+        "population_real_mean": -0.9132279157166147,
+        "tail_blocked_rate": 0.5,
+        "tail_gap": 5.746201005977796,
+        "tail_imagined_free_prob": 0.8365610153762129,
+        "tail_latent_mean": 6.9502918419397375,
+        "tail_real_mean": 1.204090835961941,
+        "tail_uncertainty_mean": 0.27555216496742496,
+        "top_fraction": 0.1
+      }
+    },
+    "oracle": {
+      "N64_latent": 14.998563319182423,
+      "N64_real": 6.322709612947412,
+      "latent_delta_high_n": 5.831315296803309,
+      "real_delta_high_n": 7.235937528664025,
+      "tail": {
+        "population_latent_mean": 9.16724802237911,
+        "population_real_mean": -0.9132279157166147,
+        "tail_blocked_rate": 0.0,
+        "tail_gap": 7.453321863374645,
+        "tail_imagined_free_prob": 0.9397417735922012,
+        "tail_latent_mean": 13.108694526715919,
+        "tail_real_mean": 5.655372663341273,
+        "tail_uncertainty_mean": 0.8917091908560056,
+        "top_fraction": 0.1
+      }
+    },
+    "random": {
+      "N64_latent": 9.841984541417252,
+      "N64_real": -1.4837434660857374,
+      "latent_delta_high_n": 0.6747365190381505,
+      "real_delta_high_n": -0.5705155503691351,
+      "tail": {
+        "population_latent_mean": 9.16724802237911,
+        "population_real_mean": -0.9132279157166147,
+        "tail_blocked_rate": 0.73125,
+        "tail_gap": 9.93659223530859,
+        "tail_imagined_free_prob": 0.8695533618873224,
+        "tail_latent_mean": 8.954591202094608,
+        "tail_real_mean": -0.9820010332139806,
+        "tail_uncertainty_mean": 0.6289691552971604,
+        "top_fraction": 0.1
+      }
+    }
+  }
+}

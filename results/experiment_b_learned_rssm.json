@@ -1,0 +1,122 @@
+{
+  "experiment": "B_learned_small_rssm_style_model",
+  "key_result": {
+    "raw_latent_delta_high_n": 0.9096208484136521,
+    "raw_real_delta_high_n": -1.2699841955047155,
+    "repair_n64_real_improvement_over_raw": 4.147042004688714
+  },
+  "model_artifact": "results\\learned_tiny_rssm.pt",
+  "n_records": 760,
+  "pilot_size": 120,
+  "scorers": {
+    "combined_repair": {
+      "N64_latent": 2.391007214383731,
+      "N64_real": 2.0829689705046923,
+      "latent_delta_high_n": -0.24269991865674712,
+      "real_delta_high_n": 2.8770578091839925,
+      "tail": {
+        "population_latent_mean": 2.6337071330404793,
+        "population_real_mean": -0.794088838679301,
+        "tail_blocked_rate": 0.3026315789473684,
+        "tail_gap": 0.24294219119161098,
+        "tail_imagined_free_prob": 0.7235877934302021,
+        "tail_latent_mean": 2.2280052777867,
+        "tail_real_mean": 1.985063086595089,
+        "tail_uncertainty_mean": 0.9021355194446364,
+        "top_fraction": 0.1
+      }
+    },
+    "oracle": {
+      "N64_latent": 3.4747412887162783,
+      "N64_real": 5.369182041095329,
+      "latent_delta_high_n": 0.8410341556758003,
+      "real_delta_high_n": 6.163270879774632,
+      "tail": {
+        "population_latent_mean": 2.6337071330404793,
+        "population_real_mean": -0.794088838679301,
+        "tail_blocked_rate": 0.0,
+        "tail_gap": -1.7294158923842295,
+        "tail_imagined_free_prob": 0.8754991046444771,
+        "tail_latent_mean": 3.304612476182418,
+        "tail_real_mean": 5.034028368566648,
+        "tail_uncertainty_mean": 1.1781504992785365,
+        "top_fraction": 0.1
+      }
+    },
+    "pilot_calibrated": {
+      "N64_latent": 2.5942351439806166,
+      "N64_real": 2.5881118051822747,
+      "latent_delta_high_n": -0.03947198905985827,
+      "real_delta_high_n": 3.3822006438615766,
+      "tail": {
+        "population_latent_mean": 2.6337071330404793,
+        "population_real_mean": -0.794088838679301,
+        "tail_blocked_rate": 0.3026315789473684,
+        "tail_gap": 0.24348748840920642,
+        "tail_imagined_free_prob": 0.7327119867782684,
+        "tail_latent_mean": 2.2929175607951855,
+        "tail_real_mean": 2.049430072385979,
+        "tail_uncertainty_mean": 0.9145199275827977,
+        "top_fraction": 0.1
+      }
+    },
+    "random": {
+      "N64_latent": 2.5165500900789763,
+      "N64_real": -0.8251995671273178,
+      "latent_delta_high_n": -0.11715704296150031,
+      "real_delta_high_n": -0.031110728448016323,
+      "tail": {
+        "population_latent_mean": 2.6337071330404793,
+        "population_real_mean": -0.794088838679301,
+        "tail_blocked_rate": 0.6842105263157895,
+        "tail_gap": 3.308569532018066,
+        "tail_imagined_free_prob": 0.7733455753010106,
+        "tail_latent_mean": 2.5789031169068743,
+        "tail_real_mean": -0.7296664151111915,
+        "tail_uncertainty_mean": 1.031444528942382,
+        "top_fraction": 0.1
+      }
+    },
+    "raw_value": {
+      "N64_latent": 3.543327981454131,
+      "N64_real": -2.064073034184022,
+      "latent_delta_high_n": 0.9096208484136521,
+      "real_delta_high_n": -1.2699841955047155,
+      "tail": {
+        "population_latent_mean": 2.6337071330404793,
+        "population_real_mean": -0.794088838679301,
+        "tail_blocked_rate": 0.6710526315789473,
+        "tail_gap": 5.270111984222902,
+        "tail_imagined_free_prob": 0.8976358620409384,
+        "tail_latent_mean": 3.4594996782563916,
+        "tail_real_mean": -1.8106123059665107,
+        "tail_uncertainty_mean": 1.2552409382956327,
+        "top_fraction": 0.1
+      }
+    },
+    "uncertainty_pessimism": {
+      "N64_latent": 3.4063250566342957,
+      "N64_real": 2.6983548499689687,
+      "latent_delta_high_n": 0.772617923593816,
+      "real_delta_high_n": 3.4924436886482746,
+      "tail": {
+        "population_latent_mean": 2.6337071330404793,
+        "population_real_mean": -0.794088838679301,
+        "tail_blocked_rate": 0.4473684210526316,
+        "tail_gap": 2.930261121966862,
+        "tail_imagined_free_prob": 0.884117679831112,
+        "tail_latent_mean": 3.365994305417666,
+        "tail_real_mean": 0.4357331834508037,
+        "tail_uncertainty_mean": 1.1812816219879483,
+        "top_fraction": 0.1
+      }
+    }
+  },
+  "train_losses": {
+    "kl": 0.12408295273780823,
+    "loss": 4.401102066040039,
+    "recon_loss": 0.1740085482597351,
+    "reward_loss": 0.5500518679618835,
+    "value_loss": 10.498744010925293
+  }
+}
