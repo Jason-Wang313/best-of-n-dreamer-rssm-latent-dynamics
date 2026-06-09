@@ -55,6 +55,11 @@ def build_claim_status(root: Path) -> dict[str, Any]:
     exp_c = _load(results / "experiment_c_belief_collapse.json")
     exp_d = _load(results / "experiment_d_horizon_budget.json")
     exp_e = _load(results / "experiment_e_repairs.json")
+    exp_f = _load(results / "experiment_f_closed_loop_planning.json")
+    exp_g = _load(results / "experiment_g_label_budget_ablation.json")
+    exp_h = _load(results / "experiment_h_ood_stress_grid.json")
+    exp_i = _load(results / "experiment_i_gymnasium_benchmarks.json")
+    leakage = _load(results / "leakage_audit.json")
     multi = _load(results / "multiseed_strong_evidence.json")
     full_multiseed = bool(multi and not multi.get("smoke"))
 
@@ -178,13 +183,112 @@ def build_claim_status(root: Path) -> dict[str, Any]:
         }
     )
 
+    f_key = exp_f.get("key_result", {}) if exp_f else {}
+    f_strong = bool(
+        exp_f
+        and not exp_f.get("smoke")
+        and f_key.get("controlled_raw_n64_mean_return", 1e9) <= f_key.get("controlled_raw_n1_mean_return", -1e9) + 0.25
+        and f_key.get("controlled_oracle_n64_mean_return", -1e9) > f_key.get("controlled_raw_n64_mean_return", 1e9) + 1.0
+        and f_key.get("controlled_combined_repair_n64_improvement_over_raw", 0.0) >= 1.0
+        and f_key.get("learned_raw_n64_mean_return", 1e9) <= f_key.get("learned_raw_n1_mean_return", -1e9) + 0.35
+        and f_key.get("learned_oracle_n64_mean_return", -1e9) > f_key.get("learned_raw_n64_mean_return", 1e9) + 0.5
+        and f_key.get("learned_combined_repair_n64_improvement_over_raw", 0.0) > 0.25
+    )
+    if full_multiseed and not f_strong:
+        weak_reasons.append("closed-loop planning evidence does not meet raw failure and repair recovery margins")
     claims.append(
         {
-            "category": "optional benchmark claims",
-            "claim": "No external benchmark, full Dreamer benchmark, or real-world robotic benchmark is implemented in this repo.",
+            "category": "closed-loop planning claims",
+            "claim": "In receding-horizon hidden-mode planning, raw high-N selection underperforms oracle and repair recovers executed return in controlled and learned RSSM-style settings.",
+            "status": _status(f_strong),
+            "evidence_strength": "STRONG" if f_strong else "WEAK",
+            "evidence": "results/experiment_f_closed_loop_planning.json; figures/figure6_closed_loop_planning.png",
+        }
+    )
+
+    g_key = exp_g.get("key_result", {}) if exp_g else {}
+    g_strong = bool(
+        exp_g
+        and not exp_g.get("smoke")
+        and exp_g.get("audit_passed")
+        and g_key.get("combined_repair_128_improvement_over_raw", 0.0) >= 2.0
+        and g_key.get("combined_repair_1000_fraction_of_oracle_gap_closed", 0.0) >= 0.55
+    )
+    if full_multiseed and not g_strong:
+        weak_reasons.append("label-budget ablation does not meet high-label repair recovery margins")
+    claims.append(
+        {
+            "category": "label-budget repair claims",
+            "claim": "A small pilot-label budget can calibrate selected-tail repairs, with high-label settings closing a majority of the raw-to-oracle gap.",
+            "status": _status(g_strong),
+            "evidence_strength": "STRONG" if g_strong else "WEAK",
+            "evidence": "results/experiment_g_label_budget_ablation.json; figures/figure7_label_budget_repair.png",
+        }
+    )
+
+    leakage_ok = bool(
+        leakage
+        and not leakage.get("smoke")
+        and leakage.get("passed")
+        and leakage.get("clean_audit", {}).get("passed")
+        and not leakage.get("leaky_sentinel", {}).get("passed", True)
+    )
+    claims.append(
+        {
+            "category": "leakage-free calibration claims",
+            "claim": "Pilot-label calibration is audited as eval-disjoint, and a deliberately leaky sentinel is caught by the same audit.",
+            "status": _status(leakage_ok),
+            "evidence_strength": "STRONG" if leakage_ok else "WEAK",
+            "evidence": "results/leakage_audit.json",
+        }
+    )
+
+    h_key = exp_h.get("key_result", {}) if exp_h else {}
+    h_strong = bool(
+        exp_h
+        and not exp_h.get("smoke")
+        and h_key.get("raw_high_n_harm_regions", 0) >= 1
+        and h_key.get("raw_high_n_neutral_or_helpful_regions", 0) >= 1
+        and h_key.get("combined_repair_mean_gain_high_risk_regions", 0.0) > 0.0
+    )
+    if full_multiseed and not h_strong:
+        weak_reasons.append("OOD stress grid does not show both harmful and non-harmful raw high-N regimes with repair mitigation")
+    claims.append(
+        {
+            "category": "OOD stress-grid claims",
+            "claim": "OOD stress sweeps identify regimes where raw high-N selection hurts and regimes where it is neutral or helpful; repair reduces average harm in high-risk regions.",
+            "status": _status(h_strong),
+            "evidence_strength": "STRONG" if h_strong else "WEAK",
+            "evidence": "results/experiment_h_ood_stress_grid.json; figures/figure8_ood_stress_grid.png",
+        }
+    )
+
+    i_key = exp_i.get("key_result", {}) if exp_i else {}
+    i_strong = bool(
+        exp_i
+        and not exp_i.get("smoke")
+        and i_key.get("selected_tail_mismatch_benchmark_count", 0) >= 2
+        and i_key.get("combined_repair_improvement_benchmark_count", 0) >= 2
+    )
+    if full_multiseed and not i_strong:
+        weak_reasons.append("Gymnasium benchmark evidence does not meet the two-of-three mismatch and repair-support threshold")
+    claims.append(
+        {
+            "category": "lightweight Gymnasium benchmark claims",
+            "claim": "Exactly three lightweight Gymnasium toy-text benchmarks provide scoped standard stochastic-benchmark evidence for selected-tail mismatch and repair, not broad RL validation.",
+            "status": _status(i_strong),
+            "evidence_strength": "STRONG" if i_strong else "WEAK",
+            "evidence": "results/experiment_i_gymnasium_benchmarks.json; figures/figure9_gymnasium_benchmarks.png",
+        }
+    )
+
+    claims.append(
+        {
+            "category": "scope boundary claims",
+            "claim": "The benchmark scope is limited to controlled RSSM-style evidence plus lightweight Gymnasium toy-text benchmarks; it does not claim full Dreamer, broad model-based RL, or robotics validation.",
             "status": "SUPPORTED",
             "evidence_strength": "STRONG",
-            "evidence": "Repository scope and scripts are toy/RSSM-style CPU experiments only.",
+            "evidence": "Repository scope, scripts, and generated benchmark artifacts.",
         }
     )
     claims.append(
@@ -212,6 +316,8 @@ def build_claim_status(root: Path) -> dict[str, Any]:
         }
     )
 
+    if not leakage_ok:
+        weak_reasons.append("leakage audit is missing or did not catch the leaky sentinel")
     weak_count = len(weak_reasons) if full_multiseed else 0
     return {
         "schema_version": 1,

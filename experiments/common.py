@@ -27,9 +27,24 @@ def root_from_file() -> Path:
     return Path(__file__).resolve().parents[1]
 
 
-def ensure_dirs(root: Path) -> None:
-    for name in ["results", "results/tables", "figures"]:
+def ensure_dirs(root: Path, smoke: bool = False) -> None:
+    names = ["results", "results/tables", "figures"]
+    if smoke:
+        names.extend(["results/smoke", "results/smoke/tables", "figures/smoke"])
+    for name in names:
         (root / name).mkdir(parents=True, exist_ok=True)
+
+
+def results_dir(root: Path, smoke: bool = False) -> Path:
+    return root / "results" / "smoke" if smoke else root / "results"
+
+
+def tables_dir(root: Path, smoke: bool = False) -> Path:
+    return results_dir(root, smoke) / "tables"
+
+
+def figures_dir(root: Path, smoke: bool = False) -> Path:
+    return root / "figures" / "smoke" if smoke else root / "figures"
 
 
 def write_json(path: Path, payload: dict[str, Any]) -> None:
@@ -94,6 +109,7 @@ def plot_curve(
         "belief_collapsed": "#2f6fbb",
         "combined_repair": "#1a8f5a",
         "uncertainty_pessimism": "#7a3e9d",
+        "ensemble_uncertainty_repair": "#0f766e",
         "belief_consistency": "#bc6c25",
         "decoder_consistency": "#4a808a",
         "pilot_calibrated": "#44633f",

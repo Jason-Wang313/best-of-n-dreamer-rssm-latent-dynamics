@@ -9,7 +9,7 @@ from latent_dynamics_best_of_n.metrics import selection_curves, top_tail_diagnos
 from latent_dynamics_best_of_n.rssm import RSSMTrainConfig, learned_rssm_candidate_pool, train_rssm
 from latent_dynamics_best_of_n.scorers import fit_pilot_calibrator, score_records
 
-from experiments.common import N_GRID, ensure_dirs, root_from_file, smoke_argparser, write_json
+from experiments.common import N_GRID, ensure_dirs, results_dir, root_from_file, smoke_argparser, write_json
 
 
 def ci(values: list[float]) -> dict[str, float]:
@@ -138,7 +138,7 @@ def run_horizon_family(smoke: bool, seed_base: int) -> dict[str, object]:
 
 def run(smoke: bool = False, seed: int = 50):
     root = root_from_file()
-    ensure_dirs(root)
+    ensure_dirs(root, smoke=smoke)
     payload = {
         "experiment": "multiseed_strong_evidence",
         "smoke": bool(smoke),
@@ -150,7 +150,7 @@ def run(smoke: bool = False, seed: int = 50):
             "repair": run_toy_family(smoke, seed + 80, "E"),
         },
     }
-    write_json(root / "results" / "multiseed_strong_evidence.json", payload)
+    write_json(results_dir(root, smoke) / "multiseed_strong_evidence.json", payload)
     return payload
 
 

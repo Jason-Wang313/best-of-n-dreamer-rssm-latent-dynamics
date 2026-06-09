@@ -1,0 +1,28 @@
+{
+  "clean_audit": {
+    "eval_size": 1400,
+    "leaked_label_count": 0,
+    "overlap_count": 0,
+    "passed": true,
+    "pilot_size": 1000,
+    "reasons": [],
+    "scored_eval_count": 1400
+  },
+  "experiment": "leakage_audit",
+  "leaky_sentinel": {
+    "eval_size": 1400,
+    "leaked_label_count": 3,
+    "overlap_count": 0,
+    "passed": false,
+    "pilot_size": 1000,
+    "reasons": [
+      "calibrator labels include non-pilot eval candidates",
+      "label provenance is not a subset of the pilot split"
+    ],
+    "scored_eval_count": 1400
+  },
+  "passed": true,
+  "policy": "Real-utility labels used to fit calibrators must be drawn only from the pilot split; evaluation labels may only be used for reporting after scoring.",
+  "schema_version": 1,
+  "smoke": false
+}

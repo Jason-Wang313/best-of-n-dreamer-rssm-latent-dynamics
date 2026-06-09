@@ -2,7 +2,7 @@
 
 This repository studies Best-of-N selection in Dreamer/RSSM-style latent world-model planning. The central question is simple: when a learned latent model imagines many futures and picks the highest latent value, does the selected action sequence actually execute well in the real hidden dynamics?
 
-The supported thesis is intentionally bounded. In controlled CPU toy settings and a small learned RSSM-style model, increasing `N` can raise selected imagined latent value while selected executed utility stagnates or worsens. RSSM-specific diagnostics and repairs can recover much of the selected-tail real utility. This is toy and learned-small evidence, not a full Dreamer benchmark and not robot validation.
+The supported thesis is intentionally bounded. In controlled CPU toy settings, a small learned RSSM-style model, and three lightweight Gymnasium toy-text benchmarks, increasing `N` can raise selected imagined latent value while selected executed utility stagnates or worsens. RSSM-specific diagnostics and repairs can recover much of the selected-tail real utility. This is controlled and lightweight benchmark evidence, not a full Dreamer benchmark and not robot validation.
 
 ## Quickstart
 
@@ -24,7 +24,12 @@ The scripts write results under `results/` and figures under `figures/`.
 - `figures/figure3_tail_diagnostics.png`: selected-tail latent-real gaps.
 - `figures/figure4_horizon_budget.png`: horizon and selection-budget sweep.
 - `figures/figure5_exact_law_validation.png`: exact finite law versus Monte Carlo.
+- `figures/figure6_closed_loop_planning.png`: receding-horizon controlled and learned planning.
+- `figures/figure7_label_budget_repair.png`: repair recovery versus pilot-label budget.
+- `figures/figure8_ood_stress_grid.png`: OOD hidden-mode regime classification.
+- `figures/figure9_gymnasium_benchmarks.png`: lightweight Gymnasium toy-text benchmark results.
 - `results/claims_status.md`: claim audit with `SUPPORTED`, `PARTIAL`, and `UNSUPPORTED` statuses.
+- `results/leakage_audit.json`: pilot/eval split audit with a deliberately leaky sentinel.
 - `results/multiseed_strong_evidence.json`: seed-level effect-size evidence used by the strict claim audit.
 - `results/learned_tiny_rssm.pt`: small trained RSSM-style PyTorch artifact.
 
@@ -36,7 +41,7 @@ Everything scientific here is different: RSSM-like belief states, stochastic lat
 
 ## Scope Boundaries
 
-This repo does not claim to solve Dreamer or model-based reinforcement learning. It does not claim that larger `N` is always harmful or always helpful. It does not claim uncertainty is a universal repair. It does not include real-robot evidence, full Dreamer benchmarks, or external RL benchmark suites.
+This repo does not claim to solve Dreamer or model-based reinforcement learning. It does not claim that larger `N` is always harmful or always helpful. It does not claim uncertainty is a universal repair. It does not include real-robot evidence, full Dreamer benchmarks, or broad external RL benchmark suites.
 
 The intended use is as a compact research scaffold for studying selected-tail failures in latent imagination and for testing whether architecture-aware diagnostics can make high-`N` planning safer.
 

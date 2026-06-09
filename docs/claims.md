@@ -14,12 +14,17 @@ The audit categories are:
 - hidden-mode belief-collapse claims
 - horizon/selection-budget claims
 - repair claims
-- optional benchmark claims
+- closed-loop planning claims
+- label-budget repair claims
+- leakage-free calibration claims
+- OOD stress-grid claims
+- lightweight Gymnasium benchmark claims
+- scope boundary claims
 - unsupported robotics claims
 - forbidden overclaim checks
 
 Each claim is marked `SUPPORTED`, `PARTIAL`, or `UNSUPPORTED`.
 
-For full runs, the audit also requires `STRONG` evidence for the paper-level claims. The strict checks are based on `results/multiseed_strong_evidence.json`, including seed-level latent-value inflation, real-utility drops or stagnation, repair gains, belief-collapse tail diagnostics, and horizon/budget amplification margins.
+For full runs, the audit also requires `STRONG` evidence for the paper-level claims. The strict checks cover seed-level latent-value inflation, real-utility drops or stagnation, repair gains, belief-collapse tail diagnostics, horizon/budget amplification margins, closed-loop repair recovery, label-budget recovery, leakage-free calibration, OOD regime diversity, and scoped Gymnasium benchmark evidence.
 
-The audit explicitly blocks universal or out-of-scope statements, including claims that the work solves Dreamer, solves model-based RL, proves monotone harm or monotone benefit from more imagination, proves uncertainty always repairs the issue, validates real robots, upgrades toy evidence into benchmark evidence, or merely renames the WAM project.
+The audit explicitly blocks universal or out-of-scope statements, including claims that the work solves Dreamer, solves model-based RL, proves monotone harm or monotone benefit from more imagination, proves uncertainty always repairs the issue, validates real robots, upgrades lightweight toy-text evidence into broad RL validation, or merely renames the WAM project.

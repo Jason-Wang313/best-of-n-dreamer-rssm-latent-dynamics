@@ -12,12 +12,22 @@ from latent_dynamics_best_of_n.theorem import (
     utility_best_of_n_finite,
 )
 
-from experiments.common import N_GRID, ensure_dirs, plot_curve, root_from_file, smoke_argparser, write_json
+from experiments.common import (
+    N_GRID,
+    ensure_dirs,
+    figures_dir,
+    plot_curve,
+    results_dir,
+    root_from_file,
+    smoke_argparser,
+    tables_dir,
+    write_json,
+)
 
 
 def run(smoke: bool = False, seed: int = 5):
     root = root_from_file()
-    ensure_dirs(root)
+    ensure_dirs(root, smoke=smoke)
     rng = np.random.default_rng(seed)
     n = 160 if smoke else 480
     utility = rng.normal(0.0, 1.0, size=n)
@@ -56,13 +66,13 @@ def run(smoke: bool = False, seed: int = 5):
         "oracle_curve": utility_best_of_n_finite(utility, utility, [1, 16, 64]),
         "anti_aligned_curve": utility_best_of_n_finite(-utility, utility, [1, 16, 64]),
     }
-    write_json(root / "results" / "exact_law_validation.json", summary)
+    write_json(results_dir(root, smoke) / "exact_law_validation.json", summary)
     import pandas as pd
 
-    pd.DataFrame(rows).to_csv(root / "results" / "tables" / "exact_law_validation.csv", index=False)
+    pd.DataFrame(rows).to_csv(tables_dir(root, smoke) / "exact_law_validation.csv", index=False)
     plot_curve(
         rows,
-        root / "figures" / "figure5_exact_law_validation.png",
+        figures_dir(root, smoke) / "figure5_exact_law_validation.png",
         ["finite_law"],
         ["selected_real_utility", "selected_latent_value"],
         "Exact finite law matches Monte Carlo",

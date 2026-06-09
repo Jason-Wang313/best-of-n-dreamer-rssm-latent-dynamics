@@ -10,13 +10,13 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import pandas as pd
 
-from experiments.common import ensure_dirs, root_from_file, smoke_argparser
+from experiments.common import ensure_dirs, figures_dir, root_from_file, smoke_argparser, tables_dir
 
 
 def run(smoke: bool = False, seed: int = 0):
     root = root_from_file()
-    ensure_dirs(root)
-    curve_path = root / "results" / "tables" / "experiment_a_curves.csv"
+    ensure_dirs(root, smoke=smoke)
+    curve_path = tables_dir(root, smoke) / "experiment_a_curves.csv"
     if not curve_path.exists():
         from experiments.experiment_a_toy_mismatch import run as run_a
 
@@ -40,7 +40,7 @@ def run(smoke: bool = False, seed: int = 0):
     ax.grid(True, color="#dddddd", linewidth=0.7)
     ax.legend(frameon=False)
     fig.tight_layout()
-    out = root / "figures" / "figure3_tail_diagnostics.png"
+    out = figures_dir(root, smoke) / "figure3_tail_diagnostics.png"
     fig.savefig(out)
     plt.close(fig)
     return {"figure": str(out.relative_to(root))}

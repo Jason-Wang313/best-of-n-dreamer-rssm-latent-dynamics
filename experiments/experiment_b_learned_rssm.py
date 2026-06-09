@@ -8,12 +8,21 @@ import torch
 from latent_dynamics_best_of_n.envs import records_to_frame
 from latent_dynamics_best_of_n.rssm import RSSMTrainConfig, learned_rssm_candidate_pool, train_rssm
 
-from experiments.common import N_GRID, ensure_dirs, evaluate_scorers, root_from_file, smoke_argparser, write_json
+from experiments.common import (
+    N_GRID,
+    ensure_dirs,
+    evaluate_scorers,
+    results_dir,
+    root_from_file,
+    smoke_argparser,
+    tables_dir,
+    write_json,
+)
 
 
 def run(smoke: bool = False, seed: int = 1):
     root = root_from_file()
-    ensure_dirs(root)
+    ensure_dirs(root, smoke=smoke)
     cfg = RSSMTrainConfig(
         num_sequences=40 if smoke else 96,
         epochs=3 if smoke else 8,
@@ -24,19 +33,27 @@ def run(smoke: bool = False, seed: int = 1):
     records = learned_rssm_candidate_pool(model, n=260 if smoke else 760, horizon=5, seed=seed + 100)
     rows, summary = evaluate_scorers(
         records,
-        ["raw_value", "uncertainty_pessimism", "pilot_calibrated", "combined_repair", "random", "oracle"],
+        [
+            "raw_value",
+            "uncertainty_pessimism",
+            "ensemble_uncertainty_repair",
+            "pilot_calibrated",
+            "combined_repair",
+            "random",
+            "oracle",
+        ],
         N_GRID,
         pilot_size=80 if smoke else 220,
         seed=seed,
     )
-    records_to_frame(records).to_csv(root / "results" / "tables" / "experiment_b_learned_pool.csv", index=False)
+    records_to_frame(records).to_csv(tables_dir(root, smoke) / "experiment_b_learned_pool.csv", index=False)
     import pandas as pd
 
-    pd.DataFrame(rows).to_csv(root / "results" / "tables" / "experiment_b_curves.csv", index=False)
-    artifact_path = root / "results" / "learned_tiny_rssm.pt"
+    pd.DataFrame(rows).to_csv(tables_dir(root, smoke) / "experiment_b_curves.csv", index=False)
+    artifact_path = results_dir(root, smoke) / "learned_tiny_rssm.pt"
     torch.save({"state_dict": model.state_dict(), "config": cfg.__dict__, "losses": losses}, artifact_path)
     np.savez_compressed(
-        root / "results" / "learned_rssm_dataset_snapshot.npz",
+        results_dir(root, smoke) / "learned_rssm_dataset_snapshot.npz",
         obs=data["obs"][:8],
         actions=data["actions"][:8],
         rewards=data["rewards"][:8],
@@ -57,7 +74,7 @@ def run(smoke: bool = False, seed: int = 1):
         "raw_real_delta_high_n": raw["real_delta_high_n"],
         "repair_n64_real_improvement_over_raw": repair["N64_real"] - raw["N64_real"],
     }
-    write_json(root / "results" / "experiment_b_learned_rssm.json", summary)
+    write_json(results_dir(root, smoke) / "experiment_b_learned_rssm.json", summary)
     return summary
 
 

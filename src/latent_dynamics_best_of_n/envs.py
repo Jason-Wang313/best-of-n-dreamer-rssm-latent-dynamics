@@ -165,6 +165,7 @@ class HiddenModeToyEnv:
                 "belief_collapsed_score": latent_value,
                 "oracle_score": real_utility,
                 "random_score": rng.normal(0.0, 1.0),
+                "ensemble_std": 0.55 * uncertainty + 0.25 * decoder_error + 0.20 * posterior_prior_kl,
             }
             records.append(
                 RolloutRecord(

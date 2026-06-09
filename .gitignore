@@ -9,3 +9,5 @@ build/
 dist/
 *.egg-info/
 .coverage
+results/smoke/
+figures/smoke/

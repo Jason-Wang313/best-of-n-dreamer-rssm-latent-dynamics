@@ -28,8 +28,11 @@ def test_scorer_repairs_penalize_hallucinated_tail():
     calibrator = fit_pilot_calibrator(records[:64])
     raw = score_records(records, "raw_value")
     repaired = score_records(records, "combined_repair", calibrator=calibrator)
+    ensemble = score_records(records, "ensemble_uncertainty_repair", calibrator=calibrator)
     risky = np.argsort([r.uncertainty + r.decoder_error + r.posterior_prior_kl for r in records])[-20:]
     assert np.mean(repaired[risky] - raw[risky]) < -0.25
+    assert ensemble.shape == raw.shape
+    assert np.isfinite(ensemble).all()
     oracle = score_records(records, "oracle")
     assert np.allclose(oracle, [r.real_utility for r in records])
 

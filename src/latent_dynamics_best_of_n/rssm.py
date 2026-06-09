@@ -251,6 +251,7 @@ def learned_rssm_candidate_pool(
             "belief_collapsed_score": value_pred,
             "overconfident_score": value_pred + 0.25 * horizon * risk,
             "value_optimistic_score": value_pred + 0.75 * horizon * risk * risk,
+            "ensemble_std": float(0.55 * uncertainty + 0.25 * decoder_error + 0.20 * pp_kl + 0.10 * abs(imagined["posterior_scale"])),
         }
         records.append(
             RolloutRecord(

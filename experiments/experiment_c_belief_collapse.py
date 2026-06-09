@@ -4,12 +4,12 @@ from __future__ import annotations
 
 from latent_dynamics_best_of_n.envs import HiddenModeConfig, HiddenModeToyEnv
 
-from experiments.common import N_GRID, ensure_dirs, evaluate_scorers, root_from_file, smoke_argparser, write_json
+from experiments.common import N_GRID, ensure_dirs, evaluate_scorers, results_dir, root_from_file, smoke_argparser, tables_dir, write_json
 
 
 def run(smoke: bool = False, seed: int = 2):
     root = root_from_file()
-    ensure_dirs(root)
+    ensure_dirs(root, smoke=smoke)
     env = HiddenModeToyEnv(
         HiddenModeConfig(
             modes=("free", "blocked", "slip", "heavy"),
@@ -27,7 +27,7 @@ def run(smoke: bool = False, seed: int = 2):
     rows, summary = evaluate_scorers(records, ["belief_collapsed", "combined_repair", "random", "oracle"], N_GRID, seed=seed)
     import pandas as pd
 
-    pd.DataFrame(rows).to_csv(root / "results" / "tables" / "experiment_c_curves.csv", index=False)
+    pd.DataFrame(rows).to_csv(tables_dir(root, smoke) / "experiment_c_curves.csv", index=False)
     mode_tail = summary["scorers"]["belief_collapsed"]["tail"]
     summary.update(
         {
@@ -40,7 +40,7 @@ def run(smoke: bool = False, seed: int = 2):
             },
         }
     )
-    write_json(root / "results" / "experiment_c_belief_collapse.json", summary)
+    write_json(results_dir(root, smoke) / "experiment_c_belief_collapse.json", summary)
     return summary
 
 

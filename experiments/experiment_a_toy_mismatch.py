@@ -4,12 +4,23 @@ from __future__ import annotations
 
 from latent_dynamics_best_of_n.envs import HiddenModeConfig, HiddenModeToyEnv, records_to_frame
 
-from experiments.common import N_GRID, ensure_dirs, evaluate_scorers, plot_curve, root_from_file, smoke_argparser, write_json
+from experiments.common import (
+    N_GRID,
+    ensure_dirs,
+    evaluate_scorers,
+    figures_dir,
+    plot_curve,
+    results_dir,
+    root_from_file,
+    smoke_argparser,
+    tables_dir,
+    write_json,
+)
 
 
 def run(smoke: bool = False, seed: int = 0):
     root = root_from_file()
-    ensure_dirs(root)
+    ensure_dirs(root, smoke=smoke)
     env = HiddenModeToyEnv(HiddenModeConfig(blocked_prob=0.68, clue_strength=0.12, observation_noise=0.08))
     records = env.generate_candidate_pool(
         n=550 if smoke else 1800,
@@ -19,10 +30,10 @@ def run(smoke: bool = False, seed: int = 0):
     )
     scorers = ["random", "good", "overconfident", "value_optimistic", "belief_collapsed", "combined_repair", "oracle"]
     rows, summary = evaluate_scorers(records, scorers, N_GRID, pilot_size=120 if smoke else 360, seed=seed)
-    records_to_frame(records).to_csv(root / "results" / "tables" / "experiment_a_candidate_pool.csv", index=False)
+    records_to_frame(records).to_csv(tables_dir(root, smoke) / "experiment_a_candidate_pool.csv", index=False)
     import pandas as pd
 
-    pd.DataFrame(rows).to_csv(root / "results" / "tables" / "experiment_a_curves.csv", index=False)
+    pd.DataFrame(rows).to_csv(tables_dir(root, smoke) / "experiment_a_curves.csv", index=False)
     summary.update(
         {
             "experiment": "A_controlled_latent_dynamics_toy",
@@ -39,10 +50,10 @@ def run(smoke: bool = False, seed: int = 0):
         "repair_n64_real_improvement_over_raw": repair["N64_real"] - raw["N64_real"],
         "oracle_gap_after_repair_n64": oracle["N64_real"] - repair["N64_real"],
     }
-    write_json(root / "results" / "experiment_a_toy_mismatch.json", summary)
+    write_json(results_dir(root, smoke) / "experiment_a_toy_mismatch.json", summary)
     plot_curve(
         rows,
-        root / "figures" / "figure1_latent_mismatch.png",
+        figures_dir(root, smoke) / "figure1_latent_mismatch.png",
         ["belief_collapsed"],
         ["selected_latent_value", "selected_real_utility"],
         "Latent value inflates while executed utility falls",

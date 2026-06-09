@@ -21,6 +21,7 @@ SCORER_NAMES = {
     "uncertainty_pessimism",
     "belief_consistency",
     "decoder_consistency",
+    "ensemble_uncertainty_repair",
     "pilot_calibrated",
     "combined_repair",
 }
@@ -112,12 +113,27 @@ def score_records(
     pp_kl = _arr(records, "posterior_prior_kl")
     decoder = _arr(records, "decoder_error")
     belief = _arr(records, "belief_error")
+    ensemble_std = np.asarray(
+        [
+            float(
+                r.diagnostics.get(
+                    "ensemble_std",
+                    0.55 * r.uncertainty + 0.25 * r.decoder_error + 0.20 * r.posterior_prior_kl,
+                )
+            )
+            for r in records
+        ],
+        dtype=float,
+    )
     if scorer == "uncertainty_pessimism":
         return raw - penalty_scale * 2.25 * uncertainty
     if scorer == "belief_consistency":
         return raw - penalty_scale * 2.75 * (pp_kl + 0.5 * belief)
     if scorer == "decoder_consistency":
         return raw - penalty_scale * 3.10 * decoder
+    if scorer == "ensemble_uncertainty_repair":
+        base = calibrator.predict(records) if calibrator is not None else raw
+        return base - penalty_scale * (0.65 * ensemble_std + 0.20 * uncertainty + 0.20 * pp_kl + 0.15 * decoder)
     if scorer == "pilot_calibrated":
         if calibrator is None:
             raise ValueError("pilot_calibrated scorer requires a calibrator")

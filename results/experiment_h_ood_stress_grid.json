@@ -1,0 +1,361 @@
+{
+  "clue_strength_grid": [
+    0.05,
+    0.1,
+    0.18
+  ],
+  "experiment": "H_ood_stress_grid",
+  "hidden_mode_probability_grid": [
+    0.45,
+    0.6,
+    0.75,
+    0.85
+  ],
+  "horizon_grid": [
+    3,
+    5,
+    8
+  ],
+  "key_result": {
+    "combined_repair_mean_gain_high_risk_regions": 5.2947304781449835,
+    "raw_high_n_harm_regions": 30,
+    "raw_high_n_neutral_or_helpful_regions": 6
+  },
+  "n_values": [
+    1,
+    8,
+    64
+  ],
+  "regime_counts": {
+    "harm": 30,
+    "helpful": 5,
+    "neutral": 1
+  },
+  "regimes": [
+    {
+      "clue_strength": 0.05,
+      "combined_repair_n64_minus_raw_n64": 1.4110734083716912,
+      "hidden_mode_probability": 0.45,
+      "high_risk": false,
+      "horizon": 3,
+      "raw_n64_minus_n1_real": -0.2722268453128243,
+      "regime": "harm"
+    },
+    {
+      "clue_strength": 0.05,
+      "combined_repair_n64_minus_raw_n64": 1.8192106521839344,
+      "hidden_mode_probability": 0.45,
+      "high_risk": false,
+      "horizon": 5,
+      "raw_n64_minus_n1_real": 0.20734305654339025,
+      "regime": "neutral"
+    },
+    {
+      "clue_strength": 0.05,
+      "combined_repair_n64_minus_raw_n64": 2.5264122664352566,
+      "hidden_mode_probability": 0.45,
+      "high_risk": false,
+      "horizon": 8,
+      "raw_n64_minus_n1_real": 2.807965600951051,
+      "regime": "helpful"
+    },
+    {
+      "clue_strength": 0.1,
+      "combined_repair_n64_minus_raw_n64": 3.7872551039961557,
+      "hidden_mode_probability": 0.45,
+      "high_risk": false,
+      "horizon": 3,
+      "raw_n64_minus_n1_real": -1.1464945802664914,
+      "regime": "harm"
+    },
+    {
+      "clue_strength": 0.1,
+      "combined_repair_n64_minus_raw_n64": 3.729262444960988,
+      "hidden_mode_probability": 0.45,
+      "high_risk": false,
+      "horizon": 5,
+      "raw_n64_minus_n1_real": -0.3629774936871355,
+      "regime": "harm"
+    },
+    {
+      "clue_strength": 0.1,
+      "combined_repair_n64_minus_raw_n64": 7.490067171323196,
+      "hidden_mode_probability": 0.45,
+      "high_risk": false,
+      "horizon": 8,
+      "raw_n64_minus_n1_real": -1.5475669122141609,
+      "regime": "harm"
+    },
+    {
+      "clue_strength": 0.18,
+      "combined_repair_n64_minus_raw_n64": 2.4110687933942243,
+      "hidden_mode_probability": 0.45,
+      "high_risk": false,
+      "horizon": 3,
+      "raw_n64_minus_n1_real": 0.25077582049160185,
+      "regime": "helpful"
+    },
+    {
+      "clue_strength": 0.18,
+      "combined_repair_n64_minus_raw_n64": 1.5334839384003898,
+      "hidden_mode_probability": 0.45,
+      "high_risk": false,
+      "horizon": 5,
+      "raw_n64_minus_n1_real": 2.177417132750397,
+      "regime": "helpful"
+    },
+    {
+      "clue_strength": 0.18,
+      "combined_repair_n64_minus_raw_n64": 6.616777738728499,
+      "hidden_mode_probability": 0.45,
+      "high_risk": false,
+      "horizon": 8,
+      "raw_n64_minus_n1_real": -0.2898614190256218,
+      "regime": "harm"
+    },
+    {
+      "clue_strength": 0.05,
+      "combined_repair_n64_minus_raw_n64": 2.2213223899867116,
+      "hidden_mode_probability": 0.6,
+      "high_risk": false,
+      "horizon": 3,
+      "raw_n64_minus_n1_real": -0.29963196145973203,
+      "regime": "harm"
+    },
+    {
+      "clue_strength": 0.05,
+      "combined_repair_n64_minus_raw_n64": 5.63804573676054,
+      "hidden_mode_probability": 0.6,
+      "high_risk": false,
+      "horizon": 5,
+      "raw_n64_minus_n1_real": -3.6461062986439496,
+      "regime": "harm"
+    },
+    {
+      "clue_strength": 0.05,
+      "combined_repair_n64_minus_raw_n64": 3.4615575248585313,
+      "hidden_mode_probability": 0.6,
+      "high_risk": false,
+      "horizon": 8,
+      "raw_n64_minus_n1_real": -0.8247456597412411,
+      "regime": "harm"
+    },
+    {
+      "clue_strength": 0.1,
+      "combined_repair_n64_minus_raw_n64": 1.7631035186030415,
+      "hidden_mode_probability": 0.6,
+      "high_risk": false,
+      "horizon": 3,
+      "raw_n64_minus_n1_real": 0.45875829005051305,
+      "regime": "helpful"
+    },
+    {
+      "clue_strength": 0.1,
+      "combined_repair_n64_minus_raw_n64": 4.250846105995376,
+      "hidden_mode_probability": 0.6,
+      "high_risk": false,
+      "horizon": 5,
+      "raw_n64_minus_n1_real": -0.3978050680357519,
+      "regime": "harm"
+    },
+    {
+      "clue_strength": 0.1,
+      "combined_repair_n64_minus_raw_n64": 5.881409850612266,
+      "hidden_mode_probability": 0.6,
+      "high_risk": false,
+      "horizon": 8,
+      "raw_n64_minus_n1_real": 0.25022789298955506,
+      "regime": "helpful"
+    },
+    {
+      "clue_strength": 0.18,
+      "combined_repair_n64_minus_raw_n64": 3.4189990185592176,
+      "hidden_mode_probability": 0.6,
+      "high_risk": false,
+      "horizon": 3,
+      "raw_n64_minus_n1_real": -0.6021203033355988,
+      "regime": "harm"
+    },
+    {
+      "clue_strength": 0.18,
+      "combined_repair_n64_minus_raw_n64": 6.875027233958254,
+      "hidden_mode_probability": 0.6,
+      "high_risk": false,
+      "horizon": 5,
+      "raw_n64_minus_n1_real": -2.1370687733070115,
+      "regime": "harm"
+    },
+    {
+      "clue_strength": 0.18,
+      "combined_repair_n64_minus_raw_n64": 8.944909893842416,
+      "hidden_mode_probability": 0.6,
+      "high_risk": false,
+      "horizon": 8,
+      "raw_n64_minus_n1_real": -1.6598673686887093,
+      "regime": "harm"
+    },
+    {
+      "clue_strength": 0.05,
+      "combined_repair_n64_minus_raw_n64": 2.0359835510395055,
+      "hidden_mode_probability": 0.75,
+      "high_risk": true,
+      "horizon": 3,
+      "raw_n64_minus_n1_real": -1.0852144760082016,
+      "regime": "harm"
+    },
+    {
+      "clue_strength": 0.05,
+      "combined_repair_n64_minus_raw_n64": 4.878849982256676,
+      "hidden_mode_probability": 0.75,
+      "high_risk": true,
+      "horizon": 5,
+      "raw_n64_minus_n1_real": -3.191828469070556,
+      "regime": "harm"
+    },
+    {
+      "clue_strength": 0.05,
+      "combined_repair_n64_minus_raw_n64": 5.178553321571805,
+      "hidden_mode_probability": 0.75,
+      "high_risk": true,
+      "horizon": 8,
+      "raw_n64_minus_n1_real": -3.212785388591931,
+      "regime": "harm"
+    },
+    {
+      "clue_strength": 0.1,
+      "combined_repair_n64_minus_raw_n64": 4.720245348911007,
+      "hidden_mode_probability": 0.75,
+      "high_risk": true,
+      "horizon": 3,
+      "raw_n64_minus_n1_real": -1.7324105918135837,
+      "regime": "harm"
+    },
+    {
+      "clue_strength": 0.1,
+      "combined_repair_n64_minus_raw_n64": 5.211215316772324,
+      "hidden_mode_probability": 0.75,
+      "high_risk": true,
+      "horizon": 5,
+      "raw_n64_minus_n1_real": -1.7540181377178663,
+      "regime": "harm"
+    },
+    {
+      "clue_strength": 0.1,
+      "combined_repair_n64_minus_raw_n64": 8.239874564434135,
+      "hidden_mode_probability": 0.75,
+      "high_risk": true,
+      "horizon": 8,
+      "raw_n64_minus_n1_real": -2.6951874467630583,
+      "regime": "harm"
+    },
+    {
+      "clue_strength": 0.18,
+      "combined_repair_n64_minus_raw_n64": 4.488010318686291,
+      "hidden_mode_probability": 0.75,
+      "high_risk": false,
+      "horizon": 3,
+      "raw_n64_minus_n1_real": -1.3710842426399488,
+      "regime": "harm"
+    },
+    {
+      "clue_strength": 0.18,
+      "combined_repair_n64_minus_raw_n64": 6.633346490040595,
+      "hidden_mode_probability": 0.75,
+      "high_risk": false,
+      "horizon": 5,
+      "raw_n64_minus_n1_real": -1.6284310584940904,
+      "regime": "harm"
+    },
+    {
+      "clue_strength": 0.18,
+      "combined_repair_n64_minus_raw_n64": 8.652660685941834,
+      "hidden_mode_probability": 0.75,
+      "high_risk": false,
+      "horizon": 8,
+      "raw_n64_minus_n1_real": -0.9803549573162642,
+      "regime": "harm"
+    },
+    {
+      "clue_strength": 0.05,
+      "combined_repair_n64_minus_raw_n64": 2.9521706220793735,
+      "hidden_mode_probability": 0.85,
+      "high_risk": true,
+      "horizon": 3,
+      "raw_n64_minus_n1_real": -1.640293487273841,
+      "regime": "harm"
+    },
+    {
+      "clue_strength": 0.05,
+      "combined_repair_n64_minus_raw_n64": 4.4321933170246774,
+      "hidden_mode_probability": 0.85,
+      "high_risk": true,
+      "horizon": 5,
+      "raw_n64_minus_n1_real": -2.3558204232005098,
+      "regime": "harm"
+    },
+    {
+      "clue_strength": 0.05,
+      "combined_repair_n64_minus_raw_n64": 8.082262470910624,
+      "hidden_mode_probability": 0.85,
+      "high_risk": true,
+      "horizon": 8,
+      "raw_n64_minus_n1_real": -4.651328530461305,
+      "regime": "harm"
+    },
+    {
+      "clue_strength": 0.1,
+      "combined_repair_n64_minus_raw_n64": 3.506574009709554,
+      "hidden_mode_probability": 0.85,
+      "high_risk": true,
+      "horizon": 3,
+      "raw_n64_minus_n1_real": -2.045480769305401,
+      "regime": "harm"
+    },
+    {
+      "clue_strength": 0.1,
+      "combined_repair_n64_minus_raw_n64": 5.593720647955961,
+      "hidden_mode_probability": 0.85,
+      "high_risk": true,
+      "horizon": 5,
+      "raw_n64_minus_n1_real": -2.454266015896102,
+      "regime": "harm"
+    },
+    {
+      "clue_strength": 0.1,
+      "combined_repair_n64_minus_raw_n64": 8.70512258507415,
+      "hidden_mode_probability": 0.85,
+      "high_risk": true,
+      "horizon": 8,
+      "raw_n64_minus_n1_real": -2.5206247491301457,
+      "regime": "harm"
+    },
+    {
+      "clue_strength": 0.18,
+      "combined_repair_n64_minus_raw_n64": 5.432503904047389,
+      "hidden_mode_probability": 0.85,
+      "high_risk": false,
+      "horizon": 3,
+      "raw_n64_minus_n1_real": -2.2237544506946803,
+      "regime": "harm"
+    },
+    {
+      "clue_strength": 0.18,
+      "combined_repair_n64_minus_raw_n64": 8.465090017663009,
+      "hidden_mode_probability": 0.85,
+      "high_risk": false,
+      "horizon": 5,
+      "raw_n64_minus_n1_real": -3.360829900133775,
+      "regime": "harm"
+    },
+    {
+      "clue_strength": 0.18,
+      "combined_repair_n64_minus_raw_n64": 11.210880369890663,
+      "hidden_mode_probability": 0.85,
+      "high_risk": false,
+      "horizon": 8,
+      "raw_n64_minus_n1_real": -3.1084990013852836,
+      "regime": "harm"
+    }
+  ],
+  "smoke": false
+}

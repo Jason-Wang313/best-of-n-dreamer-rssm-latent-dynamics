@@ -46,9 +46,44 @@
       "status": "SUPPORTED"
     },
     {
-      "category": "optional benchmark claims",
-      "claim": "No external benchmark, full Dreamer benchmark, or real-world robotic benchmark is implemented in this repo.",
-      "evidence": "Repository scope and scripts are toy/RSSM-style CPU experiments only.",
+      "category": "closed-loop planning claims",
+      "claim": "In receding-horizon hidden-mode planning, raw high-N selection underperforms oracle and repair recovers executed return in controlled and learned RSSM-style settings.",
+      "evidence": "results/experiment_f_closed_loop_planning.json; figures/figure6_closed_loop_planning.png",
+      "evidence_strength": "STRONG",
+      "status": "SUPPORTED"
+    },
+    {
+      "category": "label-budget repair claims",
+      "claim": "A small pilot-label budget can calibrate selected-tail repairs, with high-label settings closing a majority of the raw-to-oracle gap.",
+      "evidence": "results/experiment_g_label_budget_ablation.json; figures/figure7_label_budget_repair.png",
+      "evidence_strength": "STRONG",
+      "status": "SUPPORTED"
+    },
+    {
+      "category": "leakage-free calibration claims",
+      "claim": "Pilot-label calibration is audited as eval-disjoint, and a deliberately leaky sentinel is caught by the same audit.",
+      "evidence": "results/leakage_audit.json",
+      "evidence_strength": "STRONG",
+      "status": "SUPPORTED"
+    },
+    {
+      "category": "OOD stress-grid claims",
+      "claim": "OOD stress sweeps identify regimes where raw high-N selection hurts and regimes where it is neutral or helpful; repair reduces average harm in high-risk regions.",
+      "evidence": "results/experiment_h_ood_stress_grid.json; figures/figure8_ood_stress_grid.png",
+      "evidence_strength": "STRONG",
+      "status": "SUPPORTED"
+    },
+    {
+      "category": "lightweight Gymnasium benchmark claims",
+      "claim": "Exactly three lightweight Gymnasium toy-text benchmarks provide scoped standard stochastic-benchmark evidence for selected-tail mismatch and repair, not broad RL validation.",
+      "evidence": "results/experiment_i_gymnasium_benchmarks.json; figures/figure9_gymnasium_benchmarks.png",
+      "evidence_strength": "STRONG",
+      "status": "SUPPORTED"
+    },
+    {
+      "category": "scope boundary claims",
+      "claim": "The benchmark scope is limited to controlled RSSM-style evidence plus lightweight Gymnasium toy-text benchmarks; it does not claim full Dreamer, broad model-based RL, or robotics validation.",
+      "evidence": "Repository scope, scripts, and generated benchmark artifacts.",
       "evidence_strength": "STRONG",
       "status": "SUPPORTED"
     },
