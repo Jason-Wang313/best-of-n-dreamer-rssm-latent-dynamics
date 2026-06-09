@@ -19,6 +19,9 @@ The scripts write results under `results/` and figures under `figures/`.
 
 ## Key Artifacts
 
+- `paper/main.tex`: anonymous ICLR-style manuscript source.
+- `paper/references.bib`: manuscript bibliography.
+- `paper/build_submission.ps1`: local PDF build helper using `pdflatex` and `bibtex`.
 - `figures/figure1_latent_mismatch.png`: selected latent value rises with `N` while executed utility falls or stalls.
 - `figures/figure2_repair_comparison.png`: raw value, repair scorers, random, and oracle comparison.
 - `figures/figure3_tail_diagnostics.png`: selected-tail latent-real gaps.
@@ -46,3 +49,19 @@ This repo does not claim to solve Dreamer or model-based reinforcement learning.
 The intended use is as a compact research scaffold for studying selected-tail failures in latent imagination and for testing whether architecture-aware diagnostics can make high-`N` planning safer.
 
 The full claim audit requires every paper-level claim to clear strong evidence checks: multi-seed selected-tail effect sizes, repair margins, explicit scope boundaries, and forbidden-overclaim scanning. Smoke runs use smaller artifacts for speed; run `bash scripts/run_all.sh` before publication-style inspection.
+
+## Paper Build
+
+From the repository root:
+
+```powershell
+pwsh paper/build_submission.ps1
+Copy-Item paper/main.pdf $env:USERPROFILE\Downloads\when_latent_imagination_lies_iclr_submission.pdf -Force
+```
+
+Before using the PDF as a review artifact, run:
+
+```bash
+bash scripts/run_claim_audit.sh
+pytest
+```

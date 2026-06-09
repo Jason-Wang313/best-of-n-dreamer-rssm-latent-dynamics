@@ -1,0 +1,237 @@
+\documentclass{article}
+
+\usepackage{iclr2026_conference,times}
+\input{math_commands.tex}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{url}
+
+\graphicspath{{../figures/}}
+
+\newtheorem{proposition}{Proposition}
+\newcommand{\score}{S}
+\newcommand{\utility}{R}
+\newcommand{\pool}{\mathcal{D}}
+\newcommand{\Expect}{\mathbb{E}}
+\newcommand{\rssm}{RSSM}
+
+\title{\raggedright When Latent Imagination Lies:\\Best-of-\(N\) Selection Can Amplify\\RSSM World-Model Errors}
+
+\author{Anonymous Authors}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Latent world models often plan by imagining many futures and selecting the candidate with the largest predicted value. Extra samples then appear to buy better plans almost for free. We study a selected-tail failure mode of this procedure in recurrent state-space model (\rssm)-style latent dynamics: increasing the number of imagined candidates can raise selected imagined value while selected executed utility stagnates or decreases. We first derive an exact finite, tie-aware law for the utility selected by Best-of-\(N\) from an empirical candidate pool. The law separates aligned selection, anti-aligned selection, and the latent-real mismatch regime where the model's score improves in the tail but executed utility does not. We then evaluate controlled hidden-mode dynamics, a small CPU-trained \rssm-style model, receding-horizon planning, out-of-distribution stress grids, and three lightweight Gymnasium toy-text benchmarks. Diagnostics based on uncertainty, posterior-prior disagreement, decoder consistency, and pilot-calibrated value recover substantial selected-tail utility in these settings. The evidence is intentionally scoped: it is controlled, CPU-scale evidence about \rssm-style selected tails, not a full Dreamer benchmark or robotics validation.
+\end{abstract}
+
+\section{Introduction}
+
+World models make planning attractive because an agent can evaluate many imagined futures before acting. In latent model-based reinforcement learning, including recurrent state-space model (\rssm) agents such as PlaNet and Dreamer \citep{hafner2019planet,hafner2020dreamer,hafner2021dreamerv2,hafner2023dreamerv3}, this planning step often reduces to a simple rule: sample or optimize a set of candidate action sequences, score them under the learned latent model, and execute the candidate with the largest imagined return. A larger candidate set should improve the selected score. The open question is whether it improves the selected action after the real environment executes it.
+
+This paper studies a narrow but important failure mode. If the high-scoring tail of a latent model is overoptimistic, then Best-of-\(N\) can become a mechanism for finding model errors. The selected imagined value may rise with \(N\), yet the selected executed utility may stagnate or fall. This is not a paradox and not a universal indictment of more planning. It is the expected behavior of selection under score-utility mismatch: selection amplifies whatever relationship holds in the upper tail of the score used for selection.
+
+We make three contributions.
+First, we give a finite tie-aware law for the expected utility selected by Best-of-\(N\) from any empirical score/utility pool. Unlike asymptotic order-statistic arguments, the law is exact for the finite candidate pools produced by the experiments and includes score ties.
+Second, we instantiate the law in \rssm-style latent imagination, where each candidate has a latent score, architecture-aware diagnostics, and a utility observed only by executing the selected action sequence in hidden-mode dynamics.
+Third, we report controlled evidence across analytic hidden-mode rollouts, a small learned \rssm-style model, receding-horizon planning, label-budget calibration, OOD stress regimes, and three toy-text Gymnasium benchmarks. The main finding is bounded: in these CPU-scale settings, raw high-\(N\) latent selection can amplify selected-tail errors, and diagnostic repairs can recover a substantial fraction of the oracle gap without erasing all risk.
+
+\section{Finite Best-of-\(N\) Selection Law}
+
+Consider a finite empirical pool \(\pool=\{(\score_i,\utility_i)\}_{i=1}^m\), where \(\score_i\) is the score used for selection and \(\utility_i\) is the measured utility we care about. In our experiments \(\score_i\) is usually an imagined latent return or a repaired latent score, while \(\utility_i\) is the utility obtained by executing the action sequence in the hidden-mode environment. Best-of-\(N\) draws \(N\) candidates independently with replacement from \(\pool\), selects a draw with maximum score, and breaks score ties uniformly among the tied top-score draws.
+
+Sort candidates by score in ascending order. Let score tie group \(g\) occupy 1-indexed rank interval \([r_g^{\min}, r_g^{\max}]\), and let \(\bar{\utility}_g\) be the mean measured utility of candidates in that tie group.
+
+\begin{proposition}[Finite tie-aware selected utility]
+\label{prop:finite-law}
+For any \(N\geq 1\), the expected measured utility selected by Best-of-\(N\) is
+\begin{equation}
+\label{eq:finite-law}
+\Expect[\utility_{\mathrm{sel}}(N)]
+= \sum_g \bar{\utility}_g
+\left[
+\left(\frac{r_g^{\max}}{m}\right)^N
+- \left(\frac{r_g^{\min}-1}{m}\right)^N
+\right].
+\end{equation}
+\end{proposition}
+
+The bracketed term is exactly the probability that the maximum sampled score lies in tie group \(g\). Conditional on that event, uniform tie-breaking makes the selected utility equal to the tie group's mean utility. This proof is included in Appendix~\ref{app:proof}. The law makes no assumption that scores are calibrated, monotone, or even useful. If score and measured utility are aligned in the upper tail, Best-of-\(N\) improves utility. If they are anti-aligned, it worsens utility. The failure mode studied here is a latent-real mismatch: the selected latent score \(\Expect[\score_{\mathrm{sel}}(N)]\) increases with \(N\), while \(\Expect[\utility_{\mathrm{sel}}(N)]\) is flat or decreases. Figure~\ref{fig:theory-main} validates the law against Monte Carlo simulation and shows aligned, constant, and anti-aligned regimes.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.82\linewidth]{figure5_exact_law_validation.png}
+  \caption{The finite tie-aware law exactly predicts selected utility curves from empirical candidate pools. Monte Carlo error is below \(0.01\) in this validation. Oracle scoring improves selected utility with \(N\), constant utility remains constant, and anti-aligned scoring degrades utility.}
+  \label{fig:theory-main}
+\end{figure}
+
+\section{RSSM-Style Candidate Scoring and Repair}
+
+At a planning state, an \rssm-style model maintains a deterministic recurrent state \(h_t\) and stochastic latent state \(z_t\). It uses an encoder \(e_t=\mathrm{enc}(o_t)\), a recurrent transition \(h_t=f(h_{t-1},z_{t-1},a_{t-1})\), a prior \(p_\phi(z_t\mid h_t)\), an observation-conditioned posterior \(q_\phi(z_t\mid h_t,e_t)\), a decoder, a reward head, and a value head. This mirrors the architectural ingredients of latent world models \citep{hafner2019planet,hafner2020dreamer}, while deliberately remaining small enough for CPU experiments.
+
+For each candidate action sequence \(a_{t:t+H-1}\), the model imagines under the prior and assigns a raw score \(S_{\mathrm{raw}}\), the discounted latent reward plus terminal value. The real utility \(R\) is never used to select candidates in evaluation; it is measured afterward by executing the candidate in the hidden dynamics. The diagnostics available before execution are:
+\begin{itemize}
+  \item prior or ensemble uncertainty \(u\), measuring score spread or latent scale;
+  \item posterior-prior disagreement \(d_{\mathrm{pp}}\), measuring how far imagined latent modes drift from observation-conditioned belief;
+  \item decoder or state-consistency error \(e_{\mathrm{dec}}\), measuring implausibility of imagined latent states;
+  \item belief-collapse discrepancy \(b\), measuring optimistic free-mode imagination under ambiguous observations.
+\end{itemize}
+
+We evaluate several scorers. Raw value uses \(S_{\mathrm{raw}}\). Uncertainty, belief, and decoder repairs subtract scaled diagnostic penalties. A pilot-calibrated scorer fits a ridge-regularized linear predictor from latent diagnostics to real utility on a small pilot split. The combined repair uses the pilot predictor when available and subtracts a conservative diagnostic penalty:
+\begin{equation}
+S_{\mathrm{comb}} =
+\hat{R}_{\mathrm{pilot}}(x) -
+\lambda(0.30u + 0.30d_{\mathrm{pp}} + 0.25e_{\mathrm{dec}} + 0.15b).
+\end{equation}
+Pilot labels are disjoint from evaluation candidates. The leakage audit enforces that calibration labels come only from the pilot split and includes a deliberately leaky sentinel that the same audit rejects.
+
+\section{Experiments}
+
+The experiments are designed to answer four questions: Does raw high-\(N\) latent selection expose selected-tail mismatch? Does the failure appear with a learned \rssm-style model, not only an analytic proxy? Can \rssm-specific diagnostics recover utility? Where does the effect disappear or reverse?
+
+\paragraph{Controlled hidden-mode dynamics.}
+The environment has hidden physical modes such as free, blocked, slip, or heavy. Ambiguous observations make optimistic free-mode imagination plausible even when execution occurs in adverse modes. In Experiment A, raw/collapsed latent scoring at \(N=64\) increases selected latent value by \(5.36\) relative to \(N=1\), but selected executed utility drops by \(2.02\). The top decile selected by the collapsed scorer has imagined free probability \(0.966\), blocked rate \(0.717\), and latent-real gap \(14.94\). The combined repair improves \(N=64\) real utility over raw selection by \(6.15\), leaving an oracle gap of \(1.70\) rather than claiming oracle-level recovery.
+
+\paragraph{Learned \rssm-style model.}
+Experiment B trains a compact PyTorch model with encoder, recurrent state, stochastic prior/posterior, decoder, reward head, and value head. In this learned smoke-scale setting, raw selection again raises selected latent value (\(+0.91\)) while selected real utility falls (\(-1.27\)). The raw top tail has blocked rate \(0.671\) and a latent-real gap of \(5.27\). Combined repair improves \(N=64\) real utility by \(3.86\) over raw; uncertainty pessimism is stronger in this particular run, illustrating that the best diagnostic mix is setting-dependent.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.78\linewidth]{figure1_latent_mismatch.png}
+  \caption{Controlled and learned selected-tail mismatch. Raw latent selection can increase imagined selected value as \(N\) grows while selected executed utility falls or stalls.}
+  \label{fig:mismatch-main}
+\end{figure}
+
+\paragraph{Belief collapse, horizon, and repairs.}
+Experiment C isolates hidden-mode belief collapse. Raw high-\(N\) selection concentrates in optimistic imagined modes: the selected tail has imagined free probability \(0.964\) while \(72.5\%\) of selected candidates execute in blocked modes, and real utility drops by \(1.34\) from \(N=1\) to \(N=64\). Experiment D varies horizon and selection budget. At horizon \(H=8\), raw selected latent value rises by \(10.99\), selected real utility drops by \(4.10\), and the combined repair improves \(N=64\) real utility by \(9.44\). Experiment E compares repairs directly: combined repair improves \(N=64\) real utility by \(5.05\) over raw and closes \(65.7\%\) of the raw-to-oracle gap.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.82\linewidth]{figure2_repair_comparison.png}
+  \caption{Repair comparison in the controlled setting. Pilot calibration plus conservative \rssm-style penalties recovers much of the selected-tail utility, but the oracle remains above the repaired scorer.}
+  \label{fig:repair-main}
+\end{figure}
+
+\paragraph{Closed-loop and label-budget evidence.}
+In receding-horizon planning (Experiment F), raw high-\(N\) selection underperforms both oracle and repair. In the controlled planner, raw \(N=64\) mean return is \(-3.08\), compared with raw \(N=1\) at \(-0.98\), combined repair at \(0.77\), and oracle at \(1.90\). In the learned planner, raw \(N=64\) is \(-1.26\), raw \(N=1\) is \(-0.19\), combined repair is \(0.97\), and oracle is \(2.62\). Experiment G shows that pilot calibration does not require evaluation leakage: with five seeds, 16 labels improve \(N=64\) utility by \(3.31\) over raw, 128 labels by \(3.97\), and 1000 labels by \(4.30\), closing \(57.1\%\) of the raw-to-oracle gap.
+
+\paragraph{OOD regimes and lightweight benchmarks.}
+Experiment H sweeps hidden-mode probability, clue strength, and horizon. Raw high-\(N\) selection is harmful in 30 of 36 regimes, neutral in 1, and helpful in 5; combined repair reduces average harm in high-risk regions by \(5.29\). This heterogeneity is important: the claim is not that large \(N\) is intrinsically bad. Experiment I adds exactly three Gymnasium toy-text benchmarks \citep{towers2024gymnasium}. Selected-tail mismatch appears in CliffWalkingSlippery and Taxi but not materially in FrozenLake. Combined repair improves \(N=64\) utility on all three, with large gains on the two mismatch benchmarks (Table~\ref{tab:gym-main}). These are lightweight standard stress tests, not broad RL validation.
+
+\begin{table}[t]
+\centering
+\caption{Gymnasium toy-text benchmark summary. Values are mean executed utility; higher is better.}
+\label{tab:gym-main}
+\begin{tabular}{lrrrr}
+\toprule
+Benchmark & Raw \(N=1\) & Raw \(N=64\) & Repair \(N=64\) & Oracle \(N=64\) \\
+\midrule
+FrozenLake-v1 & 0.02 & 0.01 & 0.01 & 0.03 \\
+CliffWalkingSlippery-v1 & -206.24 & -253.61 & -124.37 & -124.37 \\
+Taxi-v3 & -53.17 & -85.97 & -19.94 & -19.93 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Related Work}
+
+RSSM world models were introduced for latent planning from pixels in PlaNet and developed into Dreamer-style latent imagination agents \citep{hafner2019planet,hafner2020dreamer,hafner2021dreamerv2,hafner2023dreamerv3}. Model-based RL more broadly has long used learned dynamics for planning and policy improvement \citep{deisenroth2011pilco,chua2018pets,janner2019mbpo}. A recurring concern is model exploitation: optimizing against an imperfect learned model can find trajectories that look good to the model but execute poorly \citep{talvitie2017selfcorrecting}. Conservative model-based methods and uncertainty-aware penalties address related risks, especially in offline or limited-data settings \citep{kidambi2020morel,yu2020mopo}.
+
+Best-of-\(N\), reranking, and reward-model selection are also common outside RL, including human-feedback systems that sample multiple outputs and select with a learned reward model \citep{stiennon2020summarize,nakano2021webgpt,gao2023overoptimization}. Our finite law is an empirical order-statistic identity \citep{david2003orderstatistics}, but the application here is \rssm-style latent planning where score, diagnostics, and executed utility are all separately observable. Calibration work \citep{guo2017calibration} motivates our pilot-calibrated repair, while ensemble and dropout uncertainty methods motivate uncertainty diagnostics \citep{gal2016dropout,lakshminarayanan2017ensembles}. The contribution is not a new world-model architecture; it is a measurement and diagnostic protocol for selected-tail latent-real mismatch.
+
+\section{Limitations}
+
+The evidence is intentionally bounded. The learned model is small and CPU-trained. The controlled environments are hidden-mode toys designed to make latent-real mismatch inspectable. The Gymnasium benchmarks are three lightweight toy-text stochastic tasks. We do not evaluate a full Dreamer implementation, a broad model-based RL benchmark suite, real robots, safety-critical deployment, or high-dimensional continuous-control domains. The repair scorers are diagnostic baselines, not a universal recipe; their relative performance varies across settings. Finally, high \(N\) is sometimes neutral or helpful in the OOD grid, so the correct conclusion is conditional: selection amplifies the upper-tail relationship between model score and executed utility.
+
+\section{Reproducibility Statement}
+
+The supplementary source contains scripts that regenerate all JSON, CSV, figure, and audit artifacts. The publication-style checks are \texttt{bash scripts/run\_all.sh}, \texttt{bash scripts/run\_claim\_audit.sh}, and \texttt{pytest}. The appendix gives the finite-law proof, experimental configurations, all figures, leakage audit details, and claim boundaries. The anonymous submission PDF is built from this directory with standard \texttt{pdflatex}/\texttt{bibtex} passes.
+
+\bibliographystyle{iclr2026_conference}
+\bibliography{references}
+
+\appendix
+\section{Proof Details}
+\label{app:proof}
+
+For a tie group \(g\), the event that the maximum sampled score falls in \(g\) occurs when every draw has rank at most \(r_g^{\max}\) and at least one draw has rank at least \(r_g^{\min}\). Since each draw is uniform over the \(m\) candidates and sampling is with replacement, this probability is
+\[
+\left(\frac{r_g^{\max}}{m}\right)^N -
+\left(\frac{r_g^{\min}-1}{m}\right)^N.
+\]
+Conditional on this event, all sampled candidates with the maximum score are members of the same tie group. Uniform tie-breaking among the top-score sampled candidates gives the group mean measured utility \(\bar{\utility}_g\). Summing over the disjoint maximum-score groups yields Equation~\ref{eq:finite-law}.
+
+For binary utility and \(N=2\), let \(p=P(\utility=1)\) in the empirical pool and let \(\kappa=P(\score^+>\score^-)+0.5P(\score^+=\score^-)\), the tie-aware AUC. Two successes select success with probability \(p^2\). One success and one failure occur with probability \(2p(1-p)\), and the success is selected with probability \(\kappa\). Thus \(f_2=p^2+2p(1-p)\kappa\), matching the implementation check.
+
+\section{Additional Figures}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.82\linewidth]{figure3_tail_diagnostics.png}
+  \caption{Selected-tail diagnostics. High raw latent value is associated with larger latent-real gaps, high imagined free probability, and adverse executed modes in the controlled setting.}
+  \label{fig:tail-appendix}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.82\linewidth]{figure4_horizon_budget.png}
+  \caption{Horizon and selection-budget sweep. Longer horizons can make the selected latent-real mismatch larger under optimistic latent scoring.}
+  \label{fig:horizon-appendix}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.82\linewidth]{figure6_closed_loop_planning.png}
+  \caption{Closed-loop receding-horizon planning in controlled and learned \rssm-style settings. Raw high-\(N\) planning underperforms repair and oracle.}
+  \label{fig:closed-loop-appendix}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.82\linewidth]{figure7_label_budget_repair.png}
+  \caption{Pilot-label budget ablation. Small disjoint pilot sets already improve selected-tail utility; larger budgets recover more of the raw-to-oracle gap.}
+  \label{fig:label-budget-appendix}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.82\linewidth]{figure8_ood_stress_grid.png}
+  \caption{OOD stress grid over hidden-mode probability, clue strength, and horizon. Raw high-\(N\) selection is harmful in many regimes but can be neutral or helpful in others.}
+  \label{fig:ood-appendix}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.82\linewidth]{figure9_gymnasium_benchmarks.png}
+  \caption{Three lightweight Gymnasium toy-text benchmarks. Mismatch is pronounced in CliffWalkingSlippery and Taxi, minimal in FrozenLake, and repair improves \(N=64\) utility on all three.}
+  \label{fig:gym-appendix}
+\end{figure}
+
+\section{Experiment Configurations and Artifacts}
+
+All result files are generated by the scripts in the supplementary source. The main artifacts are:
+\begin{itemize}
+  \item exact law validation: \path{results/exact_law_validation.json};
+  \item controlled latent mismatch: \path{results/experiment_a_toy_mismatch.json};
+  \item learned \rssm-style model: \path{results/experiment_b_learned_rssm.json} and \path{results/learned_tiny_rssm.pt};
+  \item belief collapse and horizon sweeps: \path{results/experiment_c_belief_collapse.json} and \path{results/experiment_d_horizon_budget.json};
+  \item repair, closed-loop, and label-budget studies: \path{results/experiment_e_repairs.json}, \path{results/experiment_f_closed_loop_planning.json}, and \path{results/experiment_g_label_budget_ablation.json};
+  \item OOD and Gymnasium studies: \path{results/experiment_h_ood_stress_grid.json} and \path{results/experiment_i_gymnasium_benchmarks.json};
+  \item claim and leakage audits: \path{results/claims_status.json} and \path{results/leakage_audit.json}.
+\end{itemize}
+
+The strict multiseed audit reports strong evidence for the controlled latent dynamics family over five seeds: mean raw latent delta \(5.41\), mean raw real delta \(-1.98\), and mean repair improvement \(6.20\). The learned \rssm-style family uses three seeds: mean raw latent delta \(0.96\), mean raw real delta \(-1.64\), and mean repair improvement \(5.30\). These multiseed summaries support the qualitative claims while preserving the small-scale scope of the evidence.
+
+\section{Leakage Audit and Boundary Cases}
+
+Pilot calibration uses real-utility labels only from the pilot split. Evaluation candidates may be scored by the fitted calibrator, but their labels are used only after scoring for reporting selected utility. The audit verifies zero pilot/evaluation overlap and zero leaked labels for clean runs. A sentinel run deliberately inserts three non-pilot evaluation labels into calibrator provenance; the audit rejects it with reasons that the calibrator labels include non-pilot candidates and that label provenance is not a subset of the pilot split.
+
+Boundary cases are reviewer-facing sanity checks. Constant utility remains constant for every \(N\). Oracle scoring \(S=R\) improves selected utility with \(N\) in the finite pool. Anti-aligned scoring \(S=-R\) worsens selected utility. The OOD grid also includes regimes where raw high-\(N\) selection is neutral or helpful. These cases are important because the paper's claim is conditional on latent-real selected-tail mismatch rather than a blanket statement about selection budgets.
+
+\end{document}
