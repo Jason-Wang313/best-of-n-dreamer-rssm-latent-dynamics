@@ -1,0 +1,86 @@
+{
+  "claim": "Posterior-prior and belief-collapse diagnostics identify raw selected-tail failure before execution and recover utility under bounded CPU experiments.",
+  "experiment": "J_belief_intervention_stress",
+  "key_result": {
+    "belief_penalty_minus_raw_n64_ci": {
+      "hi": 3.5385994292812484,
+      "lo": 2.6801784201188283,
+      "mean": 3.112486941869493,
+      "n": 20.0,
+      "std": 1.0223676888077264
+    },
+    "full_minus_raw_n64_ci": {
+      "hi": 6.887215894380676,
+      "lo": 4.874118392537575,
+      "mean": 5.833251200727889,
+      "n": 20.0,
+      "std": 2.2947977380519453
+    },
+    "oracle_minus_full_n64_ci": {
+      "hi": 4.57259365176621,
+      "lo": 3.61135587336931,
+      "mean": 4.0625919439706175,
+      "n": 20.0,
+      "std": 1.1249310618862391
+    },
+    "raw_harmful_fraction": 0.9,
+    "raw_harmful_seed_regime_count": 18,
+    "raw_latent_delta_high_n_ci": {
+      "hi": 7.38225714001772,
+      "lo": 6.39197773144395,
+      "mean": 6.878418486278444,
+      "n": 20.0,
+      "std": 1.1660814118899554
+    },
+    "raw_real_delta_high_n_ci": {
+      "hi": -1.5241593889863756,
+      "lo": -2.985089554308527,
+      "mean": -2.2769841026784214,
+      "n": 20.0,
+      "std": 1.7345501794627296
+    },
+    "tail_drift_gap_corr_ci": {
+      "hi": 0.44361370402345884,
+      "lo": 0.36108567652267426,
+      "mean": 0.4005826805764845,
+      "n": 20.0,
+      "std": 0.10368036151153884
+    }
+  },
+  "n_records_per_seed_regime": 600,
+  "n_seed_regime_units": 20,
+  "n_values": [
+    1,
+    4,
+    16,
+    64
+  ],
+  "pilot_size": 180,
+  "regimes": [
+    {
+      "blocked_prob": 0.7,
+      "clue_strength": 0.08,
+      "horizon": 5,
+      "name": "ambiguous_blocked"
+    },
+    {
+      "blocked_prob": 0.72,
+      "clue_strength": 0.1,
+      "horizon": 8,
+      "name": "long_horizon_slip"
+    },
+    {
+      "blocked_prob": 0.76,
+      "clue_strength": 0.04,
+      "horizon": 6,
+      "name": "high_ambiguity"
+    },
+    {
+      "blocked_prob": 0.68,
+      "clue_strength": 0.06,
+      "horizon": 7,
+      "name": "decoder_drift"
+    }
+  ],
+  "smoke": false
+}

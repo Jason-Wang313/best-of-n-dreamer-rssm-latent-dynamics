@@ -8,6 +8,7 @@ from experiments.experiment_f_closed_loop_planning import (
     _make_episode_pools,
     _score_episode_pools,
 )
+from experiments.experiment_j_belief_interventions import intervention_scores
 from experiments.experiment_h_ood_stress_grid import classify_regime
 from rssm_tail_audit.envs import HiddenModeConfig, HiddenModeToyEnv
 from rssm_tail_audit.gym_benchmarks import (
@@ -69,3 +70,16 @@ def test_gymnasium_benchmarks_seeded_valid_and_finite():
             assert np.isfinite(expected_return(spec.env_id, start, actions, spec.discount))
             assert np.isfinite(record.value_pred)
             assert np.isfinite(record.real_utility)
+
+
+def test_belief_intervention_scores_are_finite_and_distinct():
+    env = HiddenModeToyEnv(HiddenModeConfig(blocked_prob=0.70, clue_strength=0.08))
+    records = env.generate_candidate_pool(n=80, horizon=5, seed=21, model_flavor="belief_collapsed")
+    calibrator = fit_pilot_calibrator(records[:30])
+    scores = intervention_scores(records, calibrator)
+    assert set(scores) == {"raw_value", "belief_drift_penalty", "pilot_plus_diagnostics", "oracle"}
+    for values in scores.values():
+        assert values.shape == (len(records),)
+        assert np.all(np.isfinite(values))
+    assert not np.allclose(scores["belief_drift_penalty"], scores["raw_value"])
+    assert not np.allclose(scores["pilot_plus_diagnostics"], scores["oracle"])

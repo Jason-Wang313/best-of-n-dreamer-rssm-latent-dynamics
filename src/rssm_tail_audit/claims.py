@@ -59,6 +59,7 @@ def build_claim_status(root: Path) -> dict[str, Any]:
     exp_g = _load(results / "experiment_g_label_budget_ablation.json")
     exp_h = _load(results / "experiment_h_ood_stress_grid.json")
     exp_i = _load(results / "experiment_i_gymnasium_benchmarks.json")
+    exp_j = _load(results / "experiment_j_belief_interventions.json")
     leakage = _load(results / "leakage_audit.json")
     multi = _load(results / "multiseed_strong_evidence.json")
     full_multiseed = bool(multi and not multi.get("smoke"))
@@ -138,6 +139,35 @@ def build_claim_status(root: Path) -> dict[str, Any]:
             "status": _status(c_ok, partial=bool(exp_c)),
             "evidence_strength": "STRONG" if c_strong else ("SMOKE" if c_single else "WEAK"),
             "evidence": "results/experiment_c_belief_collapse.json",
+        }
+    )
+
+    j_key = exp_j.get("key_result", {}) if exp_j else {}
+    j_raw_delta = j_key.get("raw_real_delta_high_n_ci", {}) if j_key else {}
+    j_belief_gain = j_key.get("belief_penalty_minus_raw_n64_ci", {}) if j_key else {}
+    j_full_gain = j_key.get("full_minus_raw_n64_ci", {}) if j_key else {}
+    j_corr = j_key.get("tail_drift_gap_corr_ci", {}) if j_key else {}
+    j_strong = bool(
+        exp_j
+        and not exp_j.get("smoke")
+        and exp_j.get("n_seed_regime_units", 0) >= 16
+        and j_key.get("raw_harmful_fraction", 0.0) >= 0.80
+        and j_raw_delta.get("hi", 1.0) < -0.50
+        and j_belief_gain.get("lo", -1.0) > 0.25
+        and j_full_gain.get("lo", -1.0) > 2.0
+        and j_corr.get("lo", -1.0) > 0.0
+    )
+    if full_multiseed and not j_strong:
+        weak_reasons.append(
+            "belief-intervention stress does not show harmful raw high-N, positive belief-diagnostic recovery, and positive drift-gap correlation"
+        )
+    claims.append(
+        {
+            "category": "belief-intervention mechanism claims",
+            "claim": "Posterior-prior and belief-collapse diagnostics are mechanistic RSSM signals: in high-risk seed-regime units, raw high-N selection is harmful, a diagnostic-only belief penalty improves N=64 utility, and drift correlates with selected-tail latent-real gap.",
+            "status": _status(j_strong),
+            "evidence_strength": "STRONG" if j_strong else "WEAK",
+            "evidence": "results/experiment_j_belief_interventions.json; figures/figure10_belief_interventions.png",
         }
     )
 

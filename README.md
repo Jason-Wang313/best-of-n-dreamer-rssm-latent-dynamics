@@ -2,7 +2,7 @@
 
 This repository studies candidate-budget selection in Dreamer/RSSM-style latent world-model planning. The central question is simple: when a learned latent model imagines many futures and picks the highest latent value, does the selected action sequence actually execute well in the real hidden dynamics?
 
-The supported thesis is intentionally bounded. In controlled CPU toy settings, a small learned RSSM-style model, and three lightweight Gymnasium toy-text benchmarks, increasing `N` can raise selected imagined latent value while selected executed utility stagnates or worsens. RSSM-specific diagnostics and repairs can recover much of the selected-tail real utility. This is controlled and lightweight benchmark evidence, not a full Dreamer benchmark and not robot validation.
+The supported thesis is intentionally bounded. In controlled CPU toy settings, a small learned RSSM-style model, belief-intervention stress tests, and three lightweight Gymnasium toy-text benchmarks, increasing `N` can raise selected imagined latent value while selected executed utility stagnates or worsens. RSSM-specific diagnostics and repairs can recover much of the selected-tail real utility. This is controlled and lightweight benchmark evidence, not a full Dreamer benchmark and not robot validation.
 
 ## Quickstart
 
@@ -31,7 +31,9 @@ The scripts write results under `results/` and figures under `figures/`.
 - `figures/figure7_label_budget_repair.png`: repair recovery versus pilot-label budget.
 - `figures/figure8_ood_stress_grid.png`: OOD hidden-mode regime classification.
 - `figures/figure9_gymnasium_benchmarks.png`: lightweight Gymnasium toy-text benchmark results.
+- `figures/figure10_belief_interventions.png`: posterior-prior and belief-collapse intervention stress.
 - `results/claims_status.md`: claim audit with `SUPPORTED`, `PARTIAL`, and `UNSUPPORTED` statuses.
+- `results/experiment_j_belief_interventions.json`: mechanism stress test for RSSM belief diagnostics.
 - `results/leakage_audit.json`: pilot/eval split audit with a deliberately leaky sentinel.
 - `results/multiseed_strong_evidence.json`: seed-level effect-size evidence used by the strict claim audit.
 - `results/learned_tiny_rssm.pt`: small trained RSSM-style PyTorch artifact.
@@ -56,8 +58,9 @@ From the repository root:
 
 ```powershell
 pwsh paper/build_submission.ps1
-Copy-Item paper/main.pdf $env:USERPROFILE\Downloads\when_latent_imagination_lies_iclr_submission.pdf -Force
 ```
+
+The default final artifact is `paper/final/best of n dreamer rssm latent dynamics-v3.pdf`. Desktop copying is intentionally opt-in and should happen only after the source is committed and pushed.
 
 Before using the PDF as a review artifact, run:
 

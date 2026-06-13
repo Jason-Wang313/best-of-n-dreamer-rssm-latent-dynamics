@@ -30,6 +30,13 @@
       "status": "SUPPORTED"
     },
     {
+      "category": "belief-intervention mechanism claims",
+      "claim": "Posterior-prior and belief-collapse diagnostics are mechanistic RSSM signals: in high-risk seed-regime units, raw high-N selection is harmful, a diagnostic-only belief penalty improves N=64 utility, and drift correlates with selected-tail latent-real gap.",
+      "evidence": "results/experiment_j_belief_interventions.json; figures/figure10_belief_interventions.png",
+      "evidence_strength": "STRONG",
+      "status": "SUPPORTED"
+    },
+    {
       "category": "horizon/selection-budget claims",
       "claim": "Varying candidate budget and horizon shows where longer imagination worsens latent-real mismatch.",
       "evidence": "results/experiment_d_horizon_budget.json; figures/figure4_horizon_budget.png",

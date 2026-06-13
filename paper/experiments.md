@@ -9,3 +9,5 @@ Experiment C stresses hidden-mode belief collapse across ambiguous modes.
 Experiment D varies horizon `H` and selection budget `N`.
 
 Experiment E compares raw value, individual repairs, combined repair, random selection, and oracle scoring.
+
+Experiment J adds a high-risk belief-intervention stress test. It checks whether posterior-prior drift and belief-collapse diagnostics recover selected-tail real utility without relying only on pilot labels.

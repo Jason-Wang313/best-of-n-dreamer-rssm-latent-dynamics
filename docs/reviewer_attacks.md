@@ -12,6 +12,10 @@ Correct. The claim audit keeps the evidence bounded to toy and learned-small set
 
 Correct. They are diagnostic repair baselines: uncertainty, posterior-prior consistency, decoder consistency, and pilot calibration. They test whether architecture-aware signals recover selected-tail utility in controlled settings.
 
+## "Are the diagnostics mechanistic or just extra score features?"
+
+Experiment J isolates posterior-prior and belief-collapse signals in high-risk seed-regime units. A diagnostic-only belief penalty improves high-budget selected real utility without pilot labels, and the raw selected tail's belief drift correlates with latent-real gap. The full repair still trails oracle selection, so the paper claims a useful RSSM mechanism rather than a complete fix.
+
 ## "Why not evaluate full Dreamer?"
 
 That is outside this scaffold. The learned experiment is RSSM-style and intentionally small enough to run on CPU in CI-like conditions.

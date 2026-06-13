@@ -28,7 +28,7 @@
 \maketitle
 
 \begin{abstract}
-RSSM world models plan in latent space, where the highest-valued imagined trajectory can be a model artifact rather than an executable plan. We study this failure as a belief-tail problem: before execution, the selected high-score tail should be audited for posterior-prior drift, decoder inconsistency, hidden-mode belief collapse, and pilot-calibrated latent-real disagreement. The paper proposes a leakage-audited belief-tail protocol that measures selected-tail utility on empirical candidate pools, diagnoses when latent score and executed utility separate, and applies architecture-aware repair scores. Controlled hidden-mode dynamics, a small CPU-trained \rssm-style model, receding-horizon planning, out-of-distribution stress grids, label-budget ablations, and three lightweight Gymnasium toy-text benchmarks show that raw large-candidate planning can raise imagined value while executed utility stagnates or decreases. Diagnostic repairs recover substantial selected-tail utility without claiming full Dreamer validation, broad model-based-RL coverage, or robotics evidence.
+RSSM world models plan in latent space, where the highest-valued imagined trajectory can be a model artifact rather than an executable plan. We study this failure as a belief-tail problem: before execution, the selected high-score tail should be audited for posterior-prior drift, decoder inconsistency, hidden-mode belief collapse, and pilot-calibrated latent-real disagreement. The paper proposes a leakage-audited belief-tail protocol that measures selected-tail utility on empirical candidate pools, diagnoses when latent score and executed utility separate, and applies architecture-aware repair scores. Controlled hidden-mode dynamics, a small CPU-trained \rssm-style model, belief-intervention stress tests, receding-horizon planning, out-of-distribution stress grids, label-budget ablations, and three lightweight Gymnasium toy-text benchmarks show that raw large-candidate planning can raise imagined value while executed utility stagnates or decreases. Diagnostic repairs recover substantial selected-tail utility without claiming full Dreamer validation, broad model-based-RL coverage, or robotics evidence.
 \end{abstract}
 
 \section{Introduction}
@@ -92,7 +92,7 @@ Pilot labels are disjoint from evaluation candidates. The leakage audit enforces
 
 \section{Experiments}
 
-The experiments are designed to answer four questions: Does raw large-budget latent selection expose selected-tail mismatch? Does the failure appear with a learned \rssm-style model, not only an analytic proxy? Can \rssm-specific diagnostics recover utility? Where does the effect disappear or reverse?
+The experiments are designed to answer five questions: Does raw large-budget latent selection expose selected-tail mismatch? Does the failure appear with a learned \rssm-style model, not only an analytic proxy? Do posterior-prior and belief-collapse diagnostics isolate an RSSM-specific mechanism? Can \rssm-specific diagnostics recover utility? Where does the effect disappear or reverse?
 
 \paragraph{Controlled hidden-mode dynamics.}
 The environment has hidden physical modes such as free, blocked, slip, or heavy. Ambiguous observations make optimistic free-mode imagination plausible even when execution occurs in adverse modes. In Experiment A, raw/collapsed latent scoring at \(N=64\) increases selected latent value by \(5.36\) relative to \(N=1\), but selected executed utility drops by \(2.02\). The top decile selected by the collapsed scorer has imagined free probability \(0.966\), blocked rate \(0.717\), and latent-real gap \(14.94\). The combined repair improves \(N=64\) real utility over raw selection by \(6.15\), leaving an oracle gap of \(1.70\) rather than claiming oracle-level recovery.
@@ -109,6 +109,9 @@ Experiment B trains a compact PyTorch model with encoder, recurrent state, stoch
 
 \paragraph{Belief collapse, horizon, and repairs.}
 Experiment C isolates hidden-mode belief collapse. Raw large-budget selection concentrates in optimistic imagined modes: the selected tail has imagined free probability \(0.964\) while \(72.5\%\) of selected candidates execute in blocked modes, and real utility drops by \(1.34\) from \(N=1\) to \(N=64\). Experiment D varies horizon and selection budget. At horizon \(H=8\), raw selected latent value rises by \(10.99\), selected real utility drops by \(4.10\), and the combined repair improves \(N=64\) real utility by \(9.44\). Experiment E compares repairs directly: combined repair improves \(N=64\) real utility by \(5.05\) over raw and closes \(65.7\%\) of the raw-to-oracle gap.
+
+\paragraph{Belief-intervention stress.}
+Experiment J attacks the mechanism directly across 20 high-risk seed-regime units. Raw high-\(N\) selection is harmful in 18 of 20 units: selected latent value rises by \(6.88\), while selected real utility changes by \(-2.28\) with bootstrap \(\mathrm{CI}=[-2.99,-1.52]\). A diagnostic-only posterior-prior plus belief-collapse penalty improves \(N=64\) selected real utility over raw by \(3.11\) (\(\mathrm{CI}=[2.68,3.54]\)) without using pilot labels. Pilot calibration plus the full diagnostic penalty improves by \(5.83\) (\(\mathrm{CI}=[4.87,6.89]\)), while oracle remains \(4.06\) higher (\(\mathrm{CI}=[3.61,4.57]\)). The raw selected tail's posterior-prior/belief drift correlates with latent-real gap at \(0.401\) (\(\mathrm{CI}=[0.361,0.444]\)). This supports the RSSM-specific diagnosis without claiming that the repair reaches oracle selection.
 
 \begin{figure}[t]
   \centering
@@ -212,6 +215,13 @@ For binary utility and \(N=2\), let \(p=P(\utility=1)\) in the empirical pool an
   \label{fig:gym-appendix}
 \end{figure}
 
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.82\linewidth]{figure10_belief_interventions.png}
+  \caption{Belief-intervention stress. Posterior-prior and belief-collapse penalties recover selected-tail real utility in high-risk RSSM-style regimes, but the oracle gap remains visible.}
+  \label{fig:belief-intervention-appendix}
+\end{figure}
+
 \section{Experiment Configurations and Artifacts}
 
 All result files are generated by the scripts in the supplementary source. The main artifacts are:
@@ -220,12 +230,12 @@ All result files are generated by the scripts in the supplementary source. The m
   \item controlled latent mismatch: \path{results/experiment_a_toy_mismatch.json};
   \item learned \rssm-style model: \path{results/experiment_b_learned_rssm.json} and \path{results/learned_tiny_rssm.pt};
   \item belief collapse and horizon sweeps: \path{results/experiment_c_belief_collapse.json} and \path{results/experiment_d_horizon_budget.json};
-  \item repair, closed-loop, and label-budget studies: \path{results/experiment_e_repairs.json}, \path{results/experiment_f_closed_loop_planning.json}, and \path{results/experiment_g_label_budget_ablation.json};
+  \item repair, belief intervention, closed-loop, and label-budget studies: \path{results/experiment_e_repairs.json}, \path{results/experiment_j_belief_interventions.json}, \path{results/experiment_f_closed_loop_planning.json}, and \path{results/experiment_g_label_budget_ablation.json};
   \item OOD and Gymnasium studies: \path{results/experiment_h_ood_stress_grid.json} and \path{results/experiment_i_gymnasium_benchmarks.json};
   \item claim and leakage audits: \path{results/claims_status.json} and \path{results/leakage_audit.json}.
 \end{itemize}
 
-The strict multiseed audit reports strong evidence for the controlled latent dynamics family over five seeds: mean raw latent delta \(5.41\), mean raw real delta \(-1.98\), and mean repair improvement \(6.20\). The learned \rssm-style family uses three seeds: mean raw latent delta \(0.96\), mean raw real delta \(-1.64\), and mean repair improvement \(5.30\). These multiseed summaries support the qualitative claims while preserving the small-scale scope of the evidence.
+The strict multiseed audit reports strong evidence for the controlled latent dynamics family over five seeds: mean raw latent delta \(5.41\), mean raw real delta \(-1.98\), and mean repair improvement \(6.20\). The learned \rssm-style family uses three seeds: mean raw latent delta \(0.96\), mean raw real delta \(-1.64\), and mean repair improvement \(5.30\). The belief-intervention stress adds 20 seed-regime units with raw high-\(N\) harm in \(90\%\) of units and positive posterior-prior diagnostic recovery. These summaries support the qualitative claims while preserving the small-scale scope of the evidence.
 
 \section{Leakage Audit and Boundary Cases}
 
