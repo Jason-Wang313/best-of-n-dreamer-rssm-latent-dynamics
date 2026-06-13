@@ -2,10 +2,10 @@ from __future__ import annotations
 
 import numpy as np
 
-from latent_dynamics_best_of_n.envs import HiddenModeConfig, HiddenModeToyEnv
-from latent_dynamics_best_of_n.gate import deployment_gate
-from latent_dynamics_best_of_n.metrics import bootstrap_ci, high_n_delta, selection_curves, top_tail_diagnostics
-from latent_dynamics_best_of_n.scorers import fit_pilot_calibrator, score_records
+from rssm_tail_audit.envs import HiddenModeConfig, HiddenModeToyEnv
+from rssm_tail_audit.gate import deployment_gate
+from rssm_tail_audit.metrics import bootstrap_ci, high_n_delta, selection_curves, top_tail_diagnostics
+from rssm_tail_audit.scorers import fit_pilot_calibrator, score_records
 
 
 def test_toy_environment_deterministic_hidden_ambiguity():

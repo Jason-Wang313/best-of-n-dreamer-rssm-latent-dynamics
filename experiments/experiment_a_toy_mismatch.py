@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from latent_dynamics_best_of_n.envs import HiddenModeConfig, HiddenModeToyEnv, records_to_frame
+from rssm_tail_audit.envs import HiddenModeConfig, HiddenModeToyEnv, records_to_frame
 
 from experiments.common import (
     N_GRID,

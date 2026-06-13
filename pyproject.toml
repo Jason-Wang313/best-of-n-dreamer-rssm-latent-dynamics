@@ -3,9 +3,9 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "latent-dynamics-best-of-n"
+name = "rssm-tail-audit"
 version = "0.1.0"
-description = "Controlled Best-of-N selection experiments for RSSM-style latent imagination."
+description = "Belief-tail audit diagnostics for RSSM-style latent imagination."
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [

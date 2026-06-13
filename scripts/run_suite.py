@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import argparse
 
-from experiments.exact_law_validation import run as run_exact
+from experiments.selected_tail_estimator_validation import run as run_exact
 from experiments.experiment_a_toy_mismatch import run as run_a
 from experiments.experiment_b_learned_rssm import run as run_b
 from experiments.experiment_c_belief_collapse import run as run_c
@@ -39,7 +39,7 @@ def main() -> None:
         "leakage": args.seed_base + 11,
     }
     steps = [
-        ("experiments/exact_law_validation.py", lambda: run_exact(smoke=args.smoke, seed=seeds["exact"])),
+        ("experiments/selected_tail_estimator_validation.py", lambda: run_exact(smoke=args.smoke, seed=seeds["exact"])),
         ("experiments/experiment_a_toy_mismatch.py", lambda: run_a(smoke=args.smoke, seed=seeds["a"])),
         ("experiments/experiment_b_learned_rssm.py", lambda: run_b(smoke=args.smoke, seed=seeds["b"])),
         ("experiments/experiment_c_belief_collapse.py", lambda: run_c(smoke=args.smoke, seed=seeds["c"])),

@@ -7,7 +7,7 @@ from typing import Iterable
 import numpy as np
 
 from .envs import RolloutRecord
-from .theorem import utility_best_of_n_finite
+from .selected_tail import utility_tail_selection_finite
 
 
 def as_array(values: Iterable[float]) -> np.ndarray:
@@ -55,10 +55,10 @@ def selection_curves(
     latent = [r.latent_value for r in records]
     pred = [r.value_pred for r in records]
     risk = [r.risk for r in records]
-    real_curve = utility_best_of_n_finite(scores_arr, real, n_values)
-    latent_curve = utility_best_of_n_finite(scores_arr, latent, n_values)
-    pred_curve = utility_best_of_n_finite(scores_arr, pred, n_values)
-    risk_curve = utility_best_of_n_finite(scores_arr, risk, n_values)
+    real_curve = utility_tail_selection_finite(scores_arr, real, n_values)
+    latent_curve = utility_tail_selection_finite(scores_arr, latent, n_values)
+    pred_curve = utility_tail_selection_finite(scores_arr, pred, n_values)
+    risk_curve = utility_tail_selection_finite(scores_arr, risk, n_values)
     return [
         {
             "N": int(N),

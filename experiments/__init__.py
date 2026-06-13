@@ -1,1 +1,1 @@
-"""Experiment entrypoints for latent dynamics Best-of-N."""
+"""Experiment entrypoints for latent dynamics candidate-budget selection."""

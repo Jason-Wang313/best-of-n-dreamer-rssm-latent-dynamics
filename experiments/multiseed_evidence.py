@@ -4,10 +4,10 @@ from __future__ import annotations
 
 import numpy as np
 
-from latent_dynamics_best_of_n.envs import HiddenModeConfig, HiddenModeToyEnv
-from latent_dynamics_best_of_n.metrics import selection_curves, top_tail_diagnostics
-from latent_dynamics_best_of_n.rssm import RSSMTrainConfig, learned_rssm_candidate_pool, train_rssm
-from latent_dynamics_best_of_n.scorers import fit_pilot_calibrator, score_records
+from rssm_tail_audit.envs import HiddenModeConfig, HiddenModeToyEnv
+from rssm_tail_audit.metrics import selection_curves, top_tail_diagnostics
+from rssm_tail_audit.rssm import RSSMTrainConfig, learned_rssm_candidate_pool, train_rssm
+from rssm_tail_audit.scorers import fit_pilot_calibrator, score_records
 
 from experiments.common import N_GRID, ensure_dirs, results_dir, root_from_file, smoke_argparser, write_json
 

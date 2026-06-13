@@ -1,4 +1,4 @@
-"""Conservative deployment gate for high-N latent imagination selection."""
+"""Conservative deployment gate for large-budget latent imagination selection."""
 
 from __future__ import annotations
 
@@ -19,7 +19,7 @@ def deployment_gate(
     harm_margin: float = 0.05,
     uncertainty_threshold: float = 1.10,
 ) -> GateDecision:
-    """Return exactly one high-N deployment decision."""
+    """Return exactly one large-budget deployment decision."""
 
     if real_delta_high_n < -abs(harm_margin) or tail_real_minus_population < -abs(harm_margin):
         return "block_high_n"

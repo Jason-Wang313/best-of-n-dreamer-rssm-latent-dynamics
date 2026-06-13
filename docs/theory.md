@@ -14,7 +14,7 @@ At time `t`, the agent observes `o_t` and considers candidate action sequences `
 
 For each candidate action sequence, the model imagines a latent rollout by sampling or taking means under the prior and accumulates a score `S`, often an imagined reward/value sum. Separately, the environment executes the selected action sequence and returns real utility `R`. The mismatch studied here is between selected latent score/value and selected executed utility.
 
-## Best-of-N Selection
+## Candidate-Budget Selection
 
 Given an empirical pool of `m` candidates, sample `N` candidates with replacement and select one with maximum score `S`. If several sampled candidates tie for maximum score, break the tie uniformly.
 
@@ -37,10 +37,10 @@ f_2 = p^2 + 2 p (1 - p) kappa
 
 Latent imagination-value mismatch is a positive selected latent value trend with flat or negative selected executed utility. The latent-real utility gap is `E[V_latent_selected] - E[R_selected]`. Selected latent value inflation is an increase in selected latent score with `N` that is not matched by executed utility.
 
-Belief overconfidence occurs when posterior or prior uncertainty is low despite ambiguous observations. Posterior-prior divergence measures disagreement between the observation-conditioned posterior and the imagined prior. Epistemic uncertainty is approximated by prior scale or ensemble/dropout-style score spread. Value hallucination is high predicted value in candidates with poor executed utility. Decoder-consistency failure is high reconstruction or state-consistency error in selected imagined states. Hidden-mode belief collapse occurs when ambiguous physical modes are mapped into an optimistic latent mode. High-`N` latent regret is the oracle selected utility minus the selected utility under a latent scorer.
+Belief overconfidence occurs when posterior or prior uncertainty is low despite ambiguous observations. Posterior-prior divergence measures disagreement between the observation-conditioned posterior and the imagined prior. Epistemic uncertainty is approximated by prior scale or ensemble/dropout-style score spread. Value hallucination is high predicted value in candidates with poor executed utility. Decoder-consistency failure is high reconstruction or state-consistency error in selected imagined states. Hidden-mode belief collapse occurs when ambiguous physical modes are mapped into an optimistic latent mode. Large-budget latent regret is the oracle selected utility minus the selected utility under a latent scorer.
 
 Repairs in this repo are diagnostic scorers: uncertainty pessimism, posterior-prior/belief consistency, decoder/state consistency, pilot-calibrated value, and combined conservative repair. A deployment gate can return exactly one of `allow_high_n`, `stop_early`, `collect_pilot_labels`, or `block_high_n`.
 
 ## Difference From WAM
 
-The finite tie-aware law is abstract and applies to any finite score/utility pool. This repo uses it only as a measurement law. The modeled object is RSSM-style latent imagination, with hidden-mode execution and architecture-specific diagnostics. No WAM training recipe, WAM rollout benchmark, or WAM-specific claim is made here.
+The finite selected-tail estimator is abstract and applies to any finite score/utility pool. This repo uses it only as a measurement estimator. The modeled object is RSSM-style latent imagination, with hidden-mode execution and architecture-specific diagnostics. No WAM training recipe, WAM rollout benchmark, or WAM-specific claim is made here.

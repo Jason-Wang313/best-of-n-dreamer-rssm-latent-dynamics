@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from latent_dynamics_best_of_n.envs import HiddenModeConfig, HiddenModeToyEnv
+from rssm_tail_audit.envs import HiddenModeConfig, HiddenModeToyEnv
 
 from experiments.common import (
     N_GRID,
@@ -73,7 +73,7 @@ def run(smoke: bool = False, seed: int = 3):
         figures_dir(root, smoke) / "figure4_horizon_budget.png",
         [f"H{h}_belief_collapsed" for h in horizons],
         ["selected_real_utility"],
-        "Real utility under horizon and Best-of-N scaling",
+        "Real utility under horizon and candidate-budget selection scaling",
         "Expected selected real utility",
     )
     return summary

@@ -11,7 +11,7 @@ pytest
 
 Expected generated artifacts:
 
-- `results/exact_law_validation.json`
+- `results/selected_tail_estimator_validation.json`
 - `results/experiment_a_toy_mismatch.json`
 - `results/experiment_b_learned_rssm.json`
 - `results/experiment_c_belief_collapse.json`

@@ -12,9 +12,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from latent_dynamics_best_of_n.envs import HiddenModeConfig, HiddenModeToyEnv, RolloutRecord
-from latent_dynamics_best_of_n.rssm import RSSMTrainConfig, TinyRSSM, learned_rssm_candidate_pool, train_rssm
-from latent_dynamics_best_of_n.scorers import fit_pilot_calibrator, score_records
+from rssm_tail_audit.envs import HiddenModeConfig, HiddenModeToyEnv, RolloutRecord
+from rssm_tail_audit.rssm import RSSMTrainConfig, TinyRSSM, learned_rssm_candidate_pool, train_rssm
+from rssm_tail_audit.scorers import fit_pilot_calibrator, score_records
 
 from experiments.common import ensure_dirs, figures_dir, results_dir, root_from_file, smoke_argparser, tables_dir, write_json
 
@@ -202,7 +202,7 @@ def _plot(rows: list[dict[str, object]], output) -> None:
         ax.set_xticks(N_VALUES)
         ax.get_xaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
         ax.set_title(family.replace("_", " "))
-        ax.set_xlabel("Best-of-N candidates")
+        ax.set_xlabel("candidate budget N")
         ax.grid(True, color="#dddddd", linewidth=0.7)
     axes[0].set_ylabel("Closed-loop return")
     axes[1].legend(frameon=False, fontsize=8)

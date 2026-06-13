@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from latent_dynamics_best_of_n.envs import HiddenModeConfig, HiddenModeToyEnv
+from rssm_tail_audit.envs import HiddenModeConfig, HiddenModeToyEnv
 
 from experiments.common import (
     N_GRID,
@@ -73,7 +73,7 @@ def run(smoke: bool = False, seed: int = 4):
             "oracle",
         ],
         ["selected_real_utility"],
-        "Repair scorers recover high-N executed utility",
+        "Repair scorers recover large-budget executed utility",
         "Expected selected real utility",
     )
     return summary

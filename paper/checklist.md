@@ -1,6 +1,6 @@
 # Checklist
 
-- [x] Exact finite tie-aware law implemented and tested.
+- [x] Exact finite selected-tail estimator implemented and tested.
 - [x] Hidden-mode toy with real utility measured after execution.
 - [x] Small learned RSSM-style model implemented in PyTorch.
 - [x] RSSM-specific diagnostics and repair scorers implemented.

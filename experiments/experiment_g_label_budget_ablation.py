@@ -9,10 +9,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from latent_dynamics_best_of_n.envs import HiddenModeConfig, HiddenModeToyEnv
-from latent_dynamics_best_of_n.leakage import audit_calibration_split, deterministic_split
-from latent_dynamics_best_of_n.metrics import selection_curves
-from latent_dynamics_best_of_n.scorers import fit_pilot_calibrator, score_records
+from rssm_tail_audit.envs import HiddenModeConfig, HiddenModeToyEnv
+from rssm_tail_audit.leakage import audit_calibration_split, deterministic_split
+from rssm_tail_audit.metrics import selection_curves
+from rssm_tail_audit.scorers import fit_pilot_calibrator, score_records
 
 from experiments.common import ensure_dirs, figures_dir, results_dir, root_from_file, smoke_argparser, tables_dir, write_json
 

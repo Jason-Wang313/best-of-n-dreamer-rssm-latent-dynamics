@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 import torch
 
-from latent_dynamics_best_of_n.rssm import RSSMTrainConfig, TinyRSSM, learned_rssm_candidate_pool, train_rssm
+from rssm_tail_audit.rssm import RSSMTrainConfig, TinyRSSM, learned_rssm_candidate_pool, train_rssm
 
 
 def test_rssm_tensor_shapes():

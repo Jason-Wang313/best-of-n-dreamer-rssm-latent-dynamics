@@ -1,4 +1,4 @@
-"""Hidden-mode toy dynamics for latent-imagination Best-of-N experiments."""
+"""Hidden-mode toy dynamics for latent-imagination candidate-budget selection experiments."""
 
 from __future__ import annotations
 

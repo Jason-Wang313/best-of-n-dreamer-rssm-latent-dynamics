@@ -2,13 +2,18 @@
 
 from __future__ import annotations
 
+import sys
 from pathlib import Path
 
-from latent_dynamics_best_of_n.claims import build_claim_status, claim_status_markdown
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from rssm_tail_audit.claims import build_claim_status, claim_status_markdown
 
 
 def main() -> None:
-    root = Path(__file__).resolve().parents[1]
+    root = ROOT
     (root / "results").mkdir(parents=True, exist_ok=True)
     payload = build_claim_status(root)
     (root / "results" / "claims_status.json").write_text(

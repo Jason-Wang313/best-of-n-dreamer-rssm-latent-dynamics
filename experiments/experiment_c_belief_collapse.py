@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from latent_dynamics_best_of_n.envs import HiddenModeConfig, HiddenModeToyEnv
+from rssm_tail_audit.envs import HiddenModeConfig, HiddenModeToyEnv
 
 from experiments.common import N_GRID, ensure_dirs, evaluate_scorers, results_dir, root_from_file, smoke_argparser, tables_dir, write_json
 

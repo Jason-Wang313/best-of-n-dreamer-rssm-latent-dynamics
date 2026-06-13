@@ -9,16 +9,16 @@ from experiments.experiment_f_closed_loop_planning import (
     _score_episode_pools,
 )
 from experiments.experiment_h_ood_stress_grid import classify_regime
-from latent_dynamics_best_of_n.envs import HiddenModeConfig, HiddenModeToyEnv
-from latent_dynamics_best_of_n.gym_benchmarks import (
+from rssm_tail_audit.envs import HiddenModeConfig, HiddenModeToyEnv
+from rssm_tail_audit.gym_benchmarks import (
     BENCHMARKS,
     expected_return,
     generate_benchmark_records,
     seeded_start_state,
     valid_action_sequence,
 )
-from latent_dynamics_best_of_n.leakage import audit_calibration_split, build_leakage_report, deterministic_split
-from latent_dynamics_best_of_n.scorers import fit_pilot_calibrator
+from rssm_tail_audit.leakage import audit_calibration_split, build_leakage_report, deterministic_split
+from rssm_tail_audit.scorers import fit_pilot_calibrator
 
 
 def test_leakage_audit_sentinel_detection():

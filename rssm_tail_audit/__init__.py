@@ -9,13 +9,13 @@ from __future__ import annotations
 
 from pathlib import Path
 
-_REAL_PACKAGE = Path(__file__).resolve().parents[1] / "src" / "latent_dynamics_best_of_n"
+_REAL_PACKAGE = Path(__file__).resolve().parents[1] / "src" / "rssm_tail_audit"
 __path__ = [str(_REAL_PACKAGE)]
 
-from .theorem import binary_best_of_n_finite, simulate_best_of_n, utility_best_of_n_finite
+from .selected_tail import binary_tail_selection_finite, simulate_tail_selection, utility_tail_selection_finite
 
 __all__ = [
-    "binary_best_of_n_finite",
-    "simulate_best_of_n",
-    "utility_best_of_n_finite",
+    "binary_tail_selection_finite",
+    "simulate_tail_selection",
+    "utility_tail_selection_finite",
 ]

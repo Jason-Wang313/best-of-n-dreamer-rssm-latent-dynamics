@@ -1,4 +1,4 @@
-"""Lightweight Gymnasium tabular benchmarks for Best-of-N selection."""
+"""Lightweight Gymnasium tabular benchmarks for candidate-budget selection."""
 
 from __future__ import annotations
 

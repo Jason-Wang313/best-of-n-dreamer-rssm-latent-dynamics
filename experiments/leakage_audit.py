@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from latent_dynamics_best_of_n.leakage import build_leakage_report
+from rssm_tail_audit.leakage import build_leakage_report
 
 from experiments.common import ensure_dirs, results_dir, root_from_file, smoke_argparser, write_json
 

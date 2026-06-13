@@ -1,8 +1,8 @@
-"""Finite tie-aware Best-of-N law used by this RSSM latent-dynamics repo.
+"""Finite selected-tail estimator used by this RSSM latent-dynamics repo.
 
 This module is the intentionally abstract part shared with the prior WAM line
 of work: given a finite candidate pool with score ``S`` and measured utility
-``R``, top-score Best-of-N selection has an exact empirical expectation. The
+``R``, top-score candidate selection has an exact empirical expectation. The
 scientific object in this repository is different: the scores are RSSM-style
 latent imagination scores while utilities are measured by executing selected
 actions in hidden-mode dynamics.
@@ -69,12 +69,12 @@ def sorted_tie_groups(scores: Iterable[float]) -> tuple[np.ndarray, list[TieGrou
     return order, groups
 
 
-def utility_best_of_n_finite(
+def utility_tail_selection_finite(
     scores: Iterable[float],
     utilities: Iterable[float],
     n_values: Iterable[int],
 ) -> dict[int, float]:
-    """Expected real-valued utility of top-score Best-of-N from a finite pool.
+    """Expected real-valued utility of top-score candidate selection from a finite pool.
 
     Sampling is with replacement. If several sampled candidates share the
     maximum score, the selected candidate is drawn uniformly from the tied
@@ -101,17 +101,17 @@ def utility_best_of_n_finite(
     return out
 
 
-def binary_best_of_n_finite(
+def binary_tail_selection_finite(
     scores: Iterable[float],
     success: Iterable[bool | int | float],
     n_values: Iterable[int],
 ) -> dict[int, float]:
-    """Exact finite Best-of-N success probability for binary utility."""
+    """Exact finite candidate-budget selection success probability for binary utility."""
 
     success_arr = _as_1d_float(success, "success")
     if not np.all((success_arr == 0.0) | (success_arr == 1.0)):
         raise ValueError("success must be binary")
-    return utility_best_of_n_finite(scores, success_arr, n_values)
+    return utility_tail_selection_finite(scores, success_arr, n_values)
 
 
 def auc_kappa(scores: Iterable[float], success: Iterable[bool | int | float]) -> float:
@@ -158,7 +158,7 @@ def tie_rate(scores: Iterable[float]) -> float:
     return float(tied_pairs / (n * (n - 1) / 2))
 
 
-def simulate_best_of_n(
+def simulate_tail_selection(
     scores: Iterable[float],
     utilities: Iterable[float],
     N: int,

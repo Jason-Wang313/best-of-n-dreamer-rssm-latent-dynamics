@@ -2,7 +2,7 @@
 
 ## "This is just order statistics."
 
-The finite law is order-statistic reasoning, and the repo says so. The contribution is the RSSM-specific failure analysis and controlled evidence around latent imagination tails.
+The finite estimator is order-statistic reasoning, and the repo says so. The contribution is the RSSM-specific belief-tail audit and controlled evidence around latent imagination tails.
 
 ## "The experiments are toy."
 

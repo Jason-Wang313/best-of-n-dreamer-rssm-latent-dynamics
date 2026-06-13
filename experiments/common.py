@@ -15,9 +15,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from latent_dynamics_best_of_n.envs import RolloutRecord
-from latent_dynamics_best_of_n.metrics import high_n_delta, selection_curves, top_tail_diagnostics
-from latent_dynamics_best_of_n.scorers import fit_pilot_calibrator, score_records
+from rssm_tail_audit.envs import RolloutRecord
+from rssm_tail_audit.metrics import high_n_delta, selection_curves, top_tail_diagnostics
+from rssm_tail_audit.scorers import fit_pilot_calibrator, score_records
 
 
 N_GRID = [1, 2, 4, 8, 16, 32, 64]
@@ -143,7 +143,7 @@ def plot_curve(
     ax.set_xscale("log", base=2)
     ax.set_xticks(sorted(df["N"].unique()))
     ax.get_xaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
-    ax.set_xlabel("Best-of-N candidates")
+    ax.set_xlabel("candidate budget N")
     ax.set_ylabel(ylabel)
     ax.set_title(title)
     ax.grid(True, color="#dddddd", linewidth=0.7)

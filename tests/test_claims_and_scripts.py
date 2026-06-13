@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from latent_dynamics_best_of_n.claims import FORBIDDEN_CLAIMS, build_claim_status
+from rssm_tail_audit.claims import FORBIDDEN_CLAIMS, build_claim_status
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -13,7 +13,7 @@ def test_script_contracts_reference_required_experiments():
     full = (ROOT / "scripts" / "run_all.sh").read_text(encoding="utf-8")
     suite = (ROOT / "scripts" / "run_suite.py").read_text(encoding="utf-8")
     for text in [suite]:
-        assert "experiments/exact_law_validation.py" in text
+        assert "experiments/selected_tail_estimator_validation.py" in text
         assert "experiments/experiment_a_toy_mismatch.py" in text
         assert "experiments/experiment_b_learned_rssm.py" in text
         assert "experiments/multiseed_evidence.py" in text

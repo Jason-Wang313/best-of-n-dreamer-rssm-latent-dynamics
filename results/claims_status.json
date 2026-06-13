@@ -2,15 +2,15 @@
   "all_supported_or_partial": true,
   "claims": [
     {
-      "category": "theorem claims",
-      "claim": "The finite tie-aware Best-of-N law exactly predicts selected utility from an empirical score/utility pool; Monte Carlo agrees within sampling error.",
-      "evidence": "results/exact_law_validation.json",
+      "category": "measurement-estimator claims",
+      "claim": "The finite selected-tail estimator exactly predicts selected utility from an empirical score/utility pool; Monte Carlo agrees within sampling error.",
+      "evidence": "results/selected_tail_estimator_validation.json",
       "evidence_strength": "STRONG",
       "status": "SUPPORTED"
     },
     {
       "category": "controlled latent dynamics claims",
-      "claim": "In the controlled hidden-mode toy, high N can inflate selected imagined latent value while selected executed real utility stagnates or drops.",
+      "claim": "In the controlled hidden-mode toy, large candidate budgets can inflate selected imagined latent value while selected executed real utility stagnates or drops.",
       "evidence": "results/experiment_a_toy_mismatch.json; figures/figure1_latent_mismatch.png",
       "evidence_strength": "STRONG",
       "status": "SUPPORTED"
@@ -24,14 +24,14 @@
     },
     {
       "category": "hidden-mode belief-collapse claims",
-      "claim": "Under ambiguous hidden modes, high-N latent selection concentrates in optimistic imagined modes even when many selected candidates execute in blocked/slip/heavy modes.",
+      "claim": "Under ambiguous hidden modes, large-budget latent selection concentrates in optimistic imagined modes even when many selected candidates execute in blocked/slip/heavy modes.",
       "evidence": "results/experiment_c_belief_collapse.json",
       "evidence_strength": "STRONG",
       "status": "SUPPORTED"
     },
     {
       "category": "horizon/selection-budget claims",
-      "claim": "Varying N and H shows where longer or fatter imagination worsens latent-real mismatch.",
+      "claim": "Varying candidate budget and horizon shows where longer imagination worsens latent-real mismatch.",
       "evidence": "results/experiment_d_horizon_budget.json; figures/figure4_horizon_budget.png",
       "evidence_strength": "STRONG",
       "status": "SUPPORTED"
@@ -47,7 +47,7 @@
     },
     {
       "category": "closed-loop planning claims",
-      "claim": "In receding-horizon hidden-mode planning, raw high-N selection underperforms oracle and repair recovers executed return in controlled and learned RSSM-style settings.",
+      "claim": "In receding-horizon hidden-mode planning, raw large-budget selection underperforms oracle and repair recovers executed return in controlled and learned RSSM-style settings.",
       "evidence": "results/experiment_f_closed_loop_planning.json; figures/figure6_closed_loop_planning.png",
       "evidence_strength": "STRONG",
       "status": "SUPPORTED"
@@ -68,7 +68,7 @@
     },
     {
       "category": "OOD stress-grid claims",
-      "claim": "OOD stress sweeps identify regimes where raw high-N selection hurts and regimes where it is neutral or helpful; repair reduces average harm in high-risk regions.",
+      "claim": "OOD stress sweeps identify regimes where raw large-budget selection hurts and regimes where it is neutral or helpful; repair reduces average harm in high-risk regions.",
       "evidence": "results/experiment_h_ood_stress_grid.json; figures/figure8_ood_stress_grid.png",
       "evidence_strength": "STRONG",
       "status": "SUPPORTED"
@@ -101,7 +101,7 @@
         "blocked_phrases": [
           "We solve Dreamer.",
           "We solve model-based RL.",
-          "Best-of-N always hurts.",
+          "candidate-budget selection always hurts.",
           "More imagination always helps.",
           "Uncertainty always fixes the issue.",
           "We validate on real robots.",
@@ -117,7 +117,7 @@
   "forbidden_claims": [
     "We solve Dreamer.",
     "We solve model-based RL.",
-    "Best-of-N always hurts.",
+    "candidate-budget selection always hurts.",
     "More imagination always helps.",
     "Uncertainty always fixes the issue.",
     "We validate on real robots.",
@@ -125,7 +125,7 @@
     "This is just a renamed WAM project."
   ],
   "full_multiseed_evidence": true,
-  "project": "When Latent Imagination Lies",
+  "project": "Belief-Tail Audits for RSSM World Models",
   "schema_version": 1,
   "unsupported_count": 0,
   "weak_count": 0,

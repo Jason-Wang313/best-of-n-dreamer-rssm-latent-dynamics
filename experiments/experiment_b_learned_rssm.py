@@ -5,8 +5,8 @@ from __future__ import annotations
 import numpy as np
 import torch
 
-from latent_dynamics_best_of_n.envs import records_to_frame
-from latent_dynamics_best_of_n.rssm import RSSMTrainConfig, learned_rssm_candidate_pool, train_rssm
+from rssm_tail_audit.envs import records_to_frame
+from rssm_tail_audit.rssm import RSSMTrainConfig, learned_rssm_candidate_pool, train_rssm
 
 from experiments.common import (
     N_GRID,

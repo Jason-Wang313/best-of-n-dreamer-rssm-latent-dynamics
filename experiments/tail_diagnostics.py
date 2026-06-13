@@ -34,7 +34,7 @@ def run(smoke: bool = False, seed: int = 0):
     ax.set_xscale("log", base=2)
     ax.set_xticks(sorted(sub["N"].unique()))
     ax.get_xaxis().set_major_formatter(matplotlib.ticker.ScalarFormatter())
-    ax.set_xlabel("Best-of-N candidates")
+    ax.set_xlabel("candidate budget N")
     ax.set_ylabel("Selected latent-real gap")
     ax.set_title("Upper-tail latent diagnostics")
     ax.grid(True, color="#dddddd", linewidth=0.7)

@@ -8,7 +8,7 @@ bash scripts/run_claim_audit.sh
 
 The audit categories are:
 
-- theorem claims
+- measurement-estimator claims
 - controlled latent dynamics claims
 - learned RSSM-style claims
 - hidden-mode belief-collapse claims

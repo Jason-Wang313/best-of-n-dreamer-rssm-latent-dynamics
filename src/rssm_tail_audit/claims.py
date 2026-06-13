@@ -10,7 +10,7 @@ from typing import Any
 FORBIDDEN_CLAIMS = [
     "We solve Dreamer.",
     "We solve model-based RL.",
-    "Best-of-N always hurts.",
+    "candidate-budget selection always hurts.",
     "More imagination always helps.",
     "Uncertainty always fixes the issue.",
     "We validate on real robots.",
@@ -49,7 +49,7 @@ def _lt(value: float | None, threshold: float) -> bool:
 
 def build_claim_status(root: Path) -> dict[str, Any]:
     results = root / "results"
-    exact = _load(results / "exact_law_validation.json")
+    exact = _load(results / "selected_tail_estimator_validation.json")
     exp_a = _load(results / "experiment_a_toy_mismatch.json")
     exp_b = _load(results / "experiment_b_learned_rssm.json")
     exp_c = _load(results / "experiment_c_belief_collapse.json")
@@ -66,17 +66,17 @@ def build_claim_status(root: Path) -> dict[str, Any]:
     claims: list[dict[str, Any]] = []
     weak_reasons: list[str] = []
 
-    theorem_ok = bool(exact and exact.get("max_abs_error", 1.0) < 0.05)
-    theorem_strength = "STRONG" if theorem_ok else "WEAK"
-    if not theorem_ok:
-        weak_reasons.append("exact finite law Monte Carlo error is above the strong threshold")
+    estimator_ok = bool(exact and exact.get("max_abs_error", 1.0) < 0.05)
+    estimator_strength = "STRONG" if estimator_ok else "WEAK"
+    if not estimator_ok:
+        weak_reasons.append("finite selected-tail estimator Monte Carlo error is above the strong threshold")
     claims.append(
         {
-            "category": "theorem claims",
-            "claim": "The finite tie-aware Best-of-N law exactly predicts selected utility from an empirical score/utility pool; Monte Carlo agrees within sampling error.",
-            "status": _status(theorem_ok),
-            "evidence_strength": theorem_strength,
-            "evidence": "results/exact_law_validation.json",
+            "category": "measurement-estimator claims",
+            "claim": "The finite selected-tail estimator exactly predicts selected utility from an empirical score/utility pool; Monte Carlo agrees within sampling error.",
+            "status": _status(estimator_ok),
+            "evidence_strength": estimator_strength,
+            "evidence": "results/selected_tail_estimator_validation.json",
         }
     )
 
@@ -94,7 +94,7 @@ def build_claim_status(root: Path) -> dict[str, Any]:
     claims.append(
         {
             "category": "controlled latent dynamics claims",
-            "claim": "In the controlled hidden-mode toy, high N can inflate selected imagined latent value while selected executed real utility stagnates or drops.",
+            "claim": "In the controlled hidden-mode toy, large candidate budgets can inflate selected imagined latent value while selected executed real utility stagnates or drops.",
             "status": _status(a_ok),
             "evidence_strength": "STRONG" if a_strong else ("SMOKE" if a_single else "WEAK"),
             "evidence": "results/experiment_a_toy_mismatch.json; figures/figure1_latent_mismatch.png",
@@ -134,7 +134,7 @@ def build_claim_status(root: Path) -> dict[str, Any]:
     claims.append(
         {
             "category": "hidden-mode belief-collapse claims",
-            "claim": "Under ambiguous hidden modes, high-N latent selection concentrates in optimistic imagined modes even when many selected candidates execute in blocked/slip/heavy modes.",
+            "claim": "Under ambiguous hidden modes, large-budget latent selection concentrates in optimistic imagined modes even when many selected candidates execute in blocked/slip/heavy modes.",
             "status": _status(c_ok, partial=bool(exp_c)),
             "evidence_strength": "STRONG" if c_strong else ("SMOKE" if c_single else "WEAK"),
             "evidence": "results/experiment_c_belief_collapse.json",
@@ -153,7 +153,7 @@ def build_claim_status(root: Path) -> dict[str, Any]:
     claims.append(
         {
             "category": "horizon/selection-budget claims",
-            "claim": "Varying N and H shows where longer or fatter imagination worsens latent-real mismatch.",
+            "claim": "Varying candidate budget and horizon shows where longer imagination worsens latent-real mismatch.",
             "status": _status(d_ok),
             "evidence_strength": "STRONG" if d_strong else ("SMOKE" if d_single else "WEAK"),
             "evidence": "results/experiment_d_horizon_budget.json; figures/figure4_horizon_budget.png",
@@ -199,7 +199,7 @@ def build_claim_status(root: Path) -> dict[str, Any]:
     claims.append(
         {
             "category": "closed-loop planning claims",
-            "claim": "In receding-horizon hidden-mode planning, raw high-N selection underperforms oracle and repair recovers executed return in controlled and learned RSSM-style settings.",
+            "claim": "In receding-horizon hidden-mode planning, raw large-budget selection underperforms oracle and repair recovers executed return in controlled and learned RSSM-style settings.",
             "status": _status(f_strong),
             "evidence_strength": "STRONG" if f_strong else "WEAK",
             "evidence": "results/experiment_f_closed_loop_planning.json; figures/figure6_closed_loop_planning.png",
@@ -252,11 +252,11 @@ def build_claim_status(root: Path) -> dict[str, Any]:
         and h_key.get("combined_repair_mean_gain_high_risk_regions", 0.0) > 0.0
     )
     if full_multiseed and not h_strong:
-        weak_reasons.append("OOD stress grid does not show both harmful and non-harmful raw high-N regimes with repair mitigation")
+        weak_reasons.append("OOD stress grid does not show both harmful and non-harmful raw large-budget regimes with repair mitigation")
     claims.append(
         {
             "category": "OOD stress-grid claims",
-            "claim": "OOD stress sweeps identify regimes where raw high-N selection hurts and regimes where it is neutral or helpful; repair reduces average harm in high-risk regions.",
+            "claim": "OOD stress sweeps identify regimes where raw large-budget selection hurts and regimes where it is neutral or helpful; repair reduces average harm in high-risk regions.",
             "status": _status(h_strong),
             "evidence_strength": "STRONG" if h_strong else "WEAK",
             "evidence": "results/experiment_h_ood_stress_grid.json; figures/figure8_ood_stress_grid.png",
@@ -321,7 +321,7 @@ def build_claim_status(root: Path) -> dict[str, Any]:
     weak_count = len(weak_reasons) if full_multiseed else 0
     return {
         "schema_version": 1,
-        "project": "When Latent Imagination Lies",
+        "project": "Belief-Tail Audits for RSSM World Models",
         "claims": claims,
         "forbidden_claims": FORBIDDEN_CLAIMS,
         "full_multiseed_evidence": full_multiseed,
