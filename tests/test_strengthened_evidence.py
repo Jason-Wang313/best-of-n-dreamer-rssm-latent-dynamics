@@ -18,6 +18,12 @@ from rssm_tail_audit.gym_benchmarks import (
     seeded_start_state,
     valid_action_sequence,
 )
+from rssm_tail_audit.classic_control import (
+    CLASSIC_CONTROL_BENCHMARKS,
+    generate_classic_control_records,
+    start_state,
+    valid_classic_action_sequence,
+)
 from rssm_tail_audit.leakage import audit_calibration_split, build_leakage_report, deterministic_split
 from rssm_tail_audit.scorers import fit_pilot_calibrator
 
@@ -70,6 +76,19 @@ def test_gymnasium_benchmarks_seeded_valid_and_finite():
             assert np.isfinite(expected_return(spec.env_id, start, actions, spec.discount))
             assert np.isfinite(record.value_pred)
             assert np.isfinite(record.real_utility)
+
+
+def test_classic_control_benchmarks_seeded_valid_and_finite():
+    for spec in CLASSIC_CONTROL_BENCHMARKS.values():
+        init = start_state(spec.env_id, seed=7)
+        records = generate_classic_control_records(spec, n=3, seed=8, initial_state=init)
+        assert len(records) == 3
+        for record in records:
+            actions = [int(a) for a in record.actions]
+            assert valid_classic_action_sequence(spec, actions)
+            assert np.isfinite(record.value_pred)
+            assert np.isfinite(record.real_utility)
+            assert np.isfinite(record.posterior_prior_kl)
 
 
 def test_belief_intervention_scores_are_finite_and_distinct():

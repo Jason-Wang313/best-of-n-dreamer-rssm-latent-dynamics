@@ -2,7 +2,7 @@
 
 This repository studies candidate-budget selection in Dreamer/RSSM-style latent world-model planning. The central question is simple: when a learned latent model imagines many futures and picks the highest latent value, does the selected action sequence actually execute well in the real hidden dynamics?
 
-The supported thesis is intentionally bounded. In controlled CPU toy settings, a small learned RSSM-style model, belief-intervention stress tests, and three lightweight Gymnasium toy-text benchmarks, increasing `N` can raise selected imagined latent value while selected executed utility stagnates or worsens. RSSM-specific diagnostics and repairs can recover much of the selected-tail real utility. This is controlled and lightweight benchmark evidence, not a full Dreamer benchmark and not robot validation.
+The supported thesis is intentionally bounded. In controlled CPU toy settings, a small learned RSSM-style model, belief-intervention stress tests, three lightweight Gymnasium toy-text benchmarks, and three standard Gymnasium classic-control tasks, increasing `N` can raise selected imagined latent value while selected executed utility stagnates or worsens in diagnosed regimes. RSSM-specific diagnostics and repairs can recover much of the selected-tail real utility. This is controlled and standard low-dimensional benchmark evidence, not a full Dreamer benchmark and not robot validation.
 
 ## Quickstart
 
@@ -32,6 +32,7 @@ The scripts write results under `results/` and figures under `figures/`.
 - `figures/figure8_ood_stress_grid.png`: OOD hidden-mode regime classification.
 - `figures/figure9_gymnasium_benchmarks.png`: lightweight Gymnasium toy-text benchmark results.
 - `figures/figure10_belief_interventions.png`: posterior-prior and belief-collapse intervention stress.
+- `figures/figure11_classic_control_benchmarks.png`: standard Gymnasium classic-control rollout stress tests.
 - `results/claims_status.md`: claim audit with `SUPPORTED`, `PARTIAL`, and `UNSUPPORTED` statuses.
 - `results/experiment_j_belief_interventions.json`: mechanism stress test for RSSM belief diagnostics.
 - `results/leakage_audit.json`: pilot/eval split audit with a deliberately leaky sentinel.
@@ -46,7 +47,7 @@ Everything scientific here is different: RSSM-like belief states, stochastic lat
 
 ## Scope Boundaries
 
-This repo does not claim to solve Dreamer or model-based reinforcement learning. It does not claim that larger `N` is always harmful or always helpful. It does not claim uncertainty is a universal repair. It does not include real-robot evidence, full Dreamer benchmarks, or broad external RL benchmark suites.
+This repo does not claim to solve Dreamer or model-based reinforcement learning. It does not claim that larger `N` is always harmful or always helpful. It does not claim uncertainty is a universal repair. It does not include real-robot evidence, full Dreamer benchmarks, high-dimensional visual-control results, or broad external RL benchmark suites.
 
 The intended use is as a compact research scaffold for studying selected-tail failures in latent imagination and for testing whether architecture-aware diagnostics can make high-`N` planning safer.
 
@@ -60,7 +61,7 @@ From the repository root:
 pwsh paper/build_submission.ps1
 ```
 
-The default final artifact is `paper/final/best of n dreamer rssm latent dynamics-v3.pdf`. Desktop copying is intentionally opt-in and should happen only after the source is committed and pushed.
+The default final artifact is `paper/final/best of n dreamer rssm latent dynamics-v4.pdf`. Desktop copying is intentionally opt-in and should happen only after the source is committed and pushed.
 
 Before using the PDF as a review artifact, run:
 

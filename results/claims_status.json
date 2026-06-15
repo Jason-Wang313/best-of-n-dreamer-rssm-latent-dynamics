@@ -88,8 +88,15 @@
       "status": "SUPPORTED"
     },
     {
+      "category": "classic-control Gymnasium benchmark claims",
+      "claim": "Three standard Gymnasium classic-control tasks add low-dimensional continuous-dynamics benchmark evidence: raw optimistic latent scoring raises selected latent value/risk in at least two tasks, while RSSM diagnostics improve executed rollout utility under disjoint pilot/eval splits.",
+      "evidence": "results/experiment_k_classic_control_benchmarks.json; figures/figure11_classic_control_benchmarks.png",
+      "evidence_strength": "STRONG",
+      "status": "SUPPORTED"
+    },
+    {
       "category": "scope boundary claims",
-      "claim": "The benchmark scope is limited to controlled RSSM-style evidence plus lightweight Gymnasium toy-text benchmarks; it does not claim full Dreamer, broad model-based RL, or robotics validation.",
+      "claim": "The benchmark scope is limited to controlled RSSM-style evidence plus lightweight Gymnasium toy-text and classic-control benchmarks; it does not claim full Dreamer, broad model-based RL, or robotics validation.",
       "evidence": "Repository scope, scripts, and generated benchmark artifacts.",
       "evidence_strength": "STRONG",
       "status": "SUPPORTED"

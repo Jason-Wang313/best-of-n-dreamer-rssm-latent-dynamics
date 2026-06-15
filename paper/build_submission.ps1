@@ -1,5 +1,5 @@
 param(
-  [string]$FinalCopy = "$PSScriptRoot\final\best of n dreamer rssm latent dynamics-v3.pdf",
+  [string]$FinalCopy = "$PSScriptRoot\final\best of n dreamer rssm latent dynamics-v4.pdf",
   [string]$DesktopCopy = ""
 )
 

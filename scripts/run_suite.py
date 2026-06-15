@@ -15,6 +15,7 @@ from experiments.experiment_g_label_budget_ablation import run as run_g
 from experiments.experiment_h_ood_stress_grid import run as run_h
 from experiments.experiment_i_gymnasium_stochastic_benchmarks import run as run_i
 from experiments.experiment_j_belief_interventions import run as run_j
+from experiments.experiment_k_classic_control_benchmarks import run as run_k
 from experiments.leakage_audit import run as run_leakage
 from experiments.multiseed_evidence import run as run_multiseed
 from experiments.tail_diagnostics import run as run_tail
@@ -38,7 +39,8 @@ def main() -> None:
         "h": args.seed_base + 9,
         "i": args.seed_base + 10,
         "j": args.seed_base + 11,
-        "leakage": args.seed_base + 12,
+        "k": args.seed_base + 12,
+        "leakage": args.seed_base + 13,
     }
     steps = [
         ("experiments/selected_tail_estimator_validation.py", lambda: run_exact(smoke=args.smoke, seed=seeds["exact"])),
@@ -52,6 +54,7 @@ def main() -> None:
         ("experiments/experiment_h_ood_stress_grid.py", lambda: run_h(smoke=args.smoke, seed=seeds["h"])),
         ("experiments/experiment_i_gymnasium_stochastic_benchmarks.py", lambda: run_i(smoke=args.smoke, seed=seeds["i"])),
         ("experiments/experiment_j_belief_interventions.py", lambda: run_j(smoke=args.smoke, seed=seeds["j"])),
+        ("experiments/experiment_k_classic_control_benchmarks.py", lambda: run_k(smoke=args.smoke, seed=seeds["k"])),
         ("experiments/leakage_audit.py", lambda: run_leakage(smoke=args.smoke, seed=seeds["leakage"])),
         ("experiments/tail_diagnostics.py", lambda: run_tail(smoke=args.smoke, seed=seeds["a"])),
         ("experiments/multiseed_evidence.py", lambda: run_multiseed(smoke=args.smoke, seed=args.seed_base + 100)),

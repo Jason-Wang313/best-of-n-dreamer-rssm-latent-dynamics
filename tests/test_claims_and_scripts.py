@@ -28,6 +28,7 @@ def test_script_contracts_reference_required_experiments():
     assert "experiments/experiment_h_ood_stress_grid.py" in suite
     assert "experiments/experiment_i_gymnasium_stochastic_benchmarks.py" in suite
     assert "experiments/experiment_j_belief_interventions.py" in suite
+    assert "experiments/experiment_k_classic_control_benchmarks.py" in suite
     assert "experiments/leakage_audit.py" in suite
     assert "if not args.smoke" in suite
 
@@ -40,6 +41,7 @@ def test_claim_audit_schema_without_forbidden_doc_hits():
     assert "forbidden overclaims" in categories
     assert "leakage-free calibration claims" in categories
     assert "lightweight Gymnasium benchmark claims" in categories
+    assert "classic-control Gymnasium benchmark claims" in categories
     assert "belief-intervention mechanism claims" in categories
     assert all(c["status"] in {"SUPPORTED", "PARTIAL", "UNSUPPORTED"} for c in payload["claims"])
 

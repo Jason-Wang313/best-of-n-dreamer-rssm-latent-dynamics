@@ -10,6 +10,8 @@
 \usepackage{booktabs}
 \usepackage{array}
 \usepackage{url}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,citecolor=green!45!black,linkcolor=blue!55!black,urlcolor=blue!55!black]{hyperref}
 
 \graphicspath{{../figures/}}
 
@@ -28,7 +30,7 @@
 \maketitle
 
 \begin{abstract}
-RSSM world models plan in latent space, where the highest-valued imagined trajectory can be a model artifact rather than an executable plan. We study this failure as a belief-tail problem: before execution, the selected high-score tail should be audited for posterior-prior drift, decoder inconsistency, hidden-mode belief collapse, and pilot-calibrated latent-real disagreement. The paper proposes a leakage-audited belief-tail protocol that measures selected-tail utility on empirical candidate pools, diagnoses when latent score and executed utility separate, and applies architecture-aware repair scores. Controlled hidden-mode dynamics, a small CPU-trained \rssm-style model, belief-intervention stress tests, receding-horizon planning, out-of-distribution stress grids, label-budget ablations, and three lightweight Gymnasium toy-text benchmarks show that raw large-candidate planning can raise imagined value while executed utility stagnates or decreases. Diagnostic repairs recover substantial selected-tail utility without claiming full Dreamer validation, broad model-based-RL coverage, or robotics evidence.
+RSSM world models plan in latent space, where the highest-valued imagined trajectory can be a model artifact rather than an executable plan. We study this failure as a belief-tail problem: before execution, the selected high-score tail should be audited for posterior-prior drift, decoder inconsistency, hidden-mode belief collapse, and pilot-calibrated latent-real disagreement. The paper proposes a leakage-audited belief-tail protocol that measures selected-tail utility on empirical candidate pools, diagnoses when latent score and executed utility separate, and applies architecture-aware repair scores. Controlled hidden-mode dynamics, a small CPU-trained \rssm-style model, belief-intervention stress tests, receding-horizon planning, out-of-distribution stress grids, label-budget ablations, three lightweight Gymnasium toy-text benchmarks, and three standard Gymnasium classic-control tasks show that raw large-candidate planning can raise imagined value while executed utility stagnates or decreases in diagnosed regimes. Diagnostic repairs recover substantial selected-tail utility without claiming full Dreamer validation, broad model-based-RL coverage, or robotics evidence.
 \end{abstract}
 
 \section{Introduction}
@@ -37,7 +39,7 @@ World models make planning attractive because an agent can evaluate many imagine
 
 This paper studies that question as a belief-tail audit problem. The failure is not simply that the model is wrong on average. The dangerous case is concentrated in the selected high-score tail: ambiguous observations, stochastic latent priors, and hidden execution modes can make a trajectory look plausible under imagined belief while its realized utility is poor. In this regime, a larger candidate budget can become a search procedure for model artifacts. The selected imagined value rises, but the executed utility stagnates or falls.
 
-Our contribution is a compact audit protocol for \rssm-style latent imagination. First, we define belief-tail diagnostics that are available before execution: posterior-prior drift, decoder/state inconsistency, uncertainty, and hidden-mode belief collapse. Second, we evaluate whether those diagnostics predict the selected-tail latent-real gap across analytic hidden-mode rollouts, a small learned \rssm-style model, receding-horizon planning, label-budget calibration, OOD stress regimes, and three toy-text Gymnasium benchmarks. Third, we test leakage-audited repair scores that use only disjoint pilot labels and architecture-aware penalties. A finite selected-tail estimator is used as a measurement device throughout; it is not presented as the paper's novelty or as a new planning algorithm.
+Our contribution is a compact audit protocol for \rssm-style latent imagination. First, we define belief-tail diagnostics that are available before execution: posterior-prior drift, decoder/state inconsistency, uncertainty, and hidden-mode belief collapse. Second, we evaluate whether those diagnostics predict the selected-tail latent-real gap across analytic hidden-mode rollouts, a small learned \rssm-style model, receding-horizon planning, label-budget calibration, OOD stress regimes, three toy-text Gymnasium benchmarks, and three standard Gymnasium classic-control tasks. Third, we test leakage-audited repair scores that use only disjoint pilot labels and architecture-aware penalties. A finite selected-tail estimator is used as a measurement device throughout; it is not presented as the paper's novelty or as a new planning algorithm.
 
 The main finding is conditional and deliberately bounded. In these CPU-scale settings, raw large-candidate latent planning often amplifies selected-tail errors, while RSSM-aware diagnostics recover a substantial fraction of the oracle gap without erasing all risk. The evidence does not claim full Dreamer validation, broad model-based-RL coverage, or robotics readiness.
 
@@ -123,8 +125,10 @@ Experiment J attacks the mechanism directly across 20 high-risk seed-regime unit
 \paragraph{Closed-loop and label-budget evidence.}
 In receding-horizon planning (Experiment F), raw large-budget selection underperforms both oracle and repair. In the controlled planner, raw \(N=64\) mean return is \(-3.08\), compared with raw \(N=1\) at \(-0.98\), combined repair at \(0.77\), and oracle at \(1.90\). In the learned planner, raw \(N=64\) is \(-1.26\), raw \(N=1\) is \(-0.19\), combined repair is \(0.97\), and oracle is \(2.62\). Experiment G shows that pilot calibration does not require evaluation leakage: with five seeds, 16 labels improve \(N=64\) utility by \(3.31\) over raw, 128 labels by \(3.97\), and 1000 labels by \(4.30\), closing \(57.1\%\) of the raw-to-oracle gap.
 
-\paragraph{OOD regimes and lightweight benchmarks.}
-Experiment H sweeps hidden-mode probability, clue strength, and horizon. Raw large-budget selection is harmful in 30 of 36 regimes, neutral in 1, and helpful in 5; combined repair reduces average harm in high-risk regions by \(5.29\). This heterogeneity is important: the claim is not that large \(N\) is intrinsically bad. Experiment I adds exactly three Gymnasium toy-text benchmarks \citep{towers2024gymnasium}. Selected-tail mismatch appears in CliffWalkingSlippery and Taxi but not materially in FrozenLake. Combined repair improves \(N=64\) utility on all three, with large gains on the two mismatch benchmarks (Table~\ref{tab:gym-main}). These are lightweight standard stress tests, not broad RL validation.
+\paragraph{OOD regimes and standard Gymnasium benchmarks.}
+Experiment H sweeps hidden-mode probability, clue strength, and horizon. Raw large-budget selection is harmful in 30 of 36 regimes, neutral in 1, and helpful in 5; combined repair reduces average harm in high-risk regions by \(5.29\). This heterogeneity is important: the claim is not that large \(N\) is intrinsically bad. Experiment I adds exactly three Gymnasium toy-text benchmarks \citep{towers2024gymnasium}. Selected-tail mismatch appears in CliffWalkingSlippery and Taxi but not materially in FrozenLake. Combined repair improves \(N=64\) utility on all three, with large gains on the two mismatch benchmarks (Table~\ref{tab:gym-main}).
+
+Experiment K adds three standard Gymnasium classic-control tasks with low-dimensional continuous dynamics: CartPole-v1, MountainCar-v0, and Acrobot-v1. Candidate action sequences are selected by a biased optimistic latent proxy and then executed in the real benchmark environment. Raw high-\(N\) selection increases selected latent value and risk in all three tasks. It hurts executed utility in CartPole and Acrobot, where combined RSSM diagnostics improve \(N=64\) utility with positive bootstrap lower bounds; MountainCar is a boundary case where raw high-\(N\) selection helps, preventing a universal-harm claim (Table~\ref{tab:classic-control-main}). These Gymnasium results are standard low-dimensional stress tests, not full Dreamer benchmark coverage.
 
 \begin{table}[t]
 \centering
@@ -141,6 +145,21 @@ Taxi-v3 & -53.17 & -85.97 & -19.94 & -19.93 \\
 \end{tabular}
 \end{table}
 
+\begin{table}[t]
+\centering
+\caption{Classic-control benchmark effects. Values are seed-level means with 95\% bootstrap intervals in brackets. Latent \(\Delta\) and real \(\Delta\) are raw \(N=64\) minus raw \(N=1\); repair gain is combined repair \(N=64\) minus raw \(N=64\).}
+\label{tab:classic-control-main}
+\begin{tabular}{lrrr}
+\toprule
+Benchmark & Raw latent \(\Delta\) & Raw real \(\Delta\) & Repair gain \\
+\midrule
+CartPole-v1 & \(17.59\,[16.55,18.42]\) & \(-1.15\,[-1.76,-0.67]\) & \(11.73\,[8.79,15.48]\) \\
+Acrobot-v1 & \(20.80\,[19.83,21.86]\) & \(-1.81\,[-2.12,-1.59]\) & \(2.80\,[1.55,4.13]\) \\
+MountainCar-v0 & \(33.72\,[31.51,35.59]\) & \(5.10\,[4.21,5.89]\) & \(0.00\,[0.00,0.00]\) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \section{Related Work}
 
 RSSM world models were introduced for latent planning from pixels in PlaNet and developed into Dreamer-style latent imagination agents \citep{hafner2019planet,hafner2020dreamer,hafner2021dreamerv2,hafner2023dreamerv3}. Model-based RL more broadly has long used learned dynamics for planning and policy improvement \citep{deisenroth2011pilco,chua2018pets,janner2019mbpo}. A recurring concern is model exploitation: optimizing against an imperfect learned model can find trajectories that look good to the model but execute poorly \citep{talvitie2017selfcorrecting}. Conservative model-based methods and uncertainty-aware penalties address related risks, especially in offline or limited-data settings \citep{kidambi2020morel,yu2020mopo}.
@@ -149,7 +168,7 @@ Candidate reranking and reward-model selection are also common outside RL, inclu
 
 \section{Limitations}
 
-The evidence is intentionally bounded. The learned model is small and CPU-trained. The controlled environments are hidden-mode toys designed to make latent-real mismatch inspectable. The Gymnasium benchmarks are three lightweight toy-text stochastic tasks. We do not evaluate a full Dreamer implementation, a broad model-based RL benchmark suite, real robots, safety-critical deployment, or high-dimensional continuous-control domains. The repair scorers are diagnostic baselines, not a universal recipe; their relative performance varies across settings. Finally, high \(N\) is sometimes neutral or helpful in the OOD grid, so the correct conclusion is conditional: selection amplifies the upper-tail relationship between model score and executed utility.
+The evidence is intentionally bounded. The learned model is small and CPU-trained. The controlled environments are hidden-mode toys designed to make latent-real mismatch inspectable. The Gymnasium benchmarks are three lightweight toy-text stochastic tasks and three standard classic-control tasks with low-dimensional states. We do not evaluate a full Dreamer implementation, a broad model-based RL benchmark suite, real robots, safety-critical deployment, or high-dimensional visual-control domains. The repair scorers are diagnostic baselines, not a universal recipe; their relative performance varies across settings. Finally, high \(N\) is sometimes neutral or helpful in the OOD grid and MountainCar, so the correct conclusion is conditional: selection amplifies the upper-tail relationship between model score and executed utility.
 
 \section{Reproducibility Statement}
 
@@ -217,6 +236,13 @@ For binary utility and \(N=2\), let \(p=P(\utility=1)\) in the empirical pool an
 
 \begin{figure}[t]
   \centering
+  \includegraphics[width=0.82\linewidth]{figure11_classic_control_benchmarks.png}
+  \caption{Three standard Gymnasium classic-control tasks. CartPole and Acrobot expose optimistic latent-tail failure and repair recovery; MountainCar is a boundary case where raw high-\(N\) selection is helpful.}
+  \label{fig:classic-control-appendix}
+\end{figure}
+
+\begin{figure}[t]
+  \centering
   \includegraphics[width=0.82\linewidth]{figure10_belief_interventions.png}
   \caption{Belief-intervention stress. Posterior-prior and belief-collapse penalties recover selected-tail real utility in high-risk RSSM-style regimes, but the oracle gap remains visible.}
   \label{fig:belief-intervention-appendix}
@@ -231,16 +257,16 @@ All result files are generated by the scripts in the supplementary source. The m
   \item learned \rssm-style model: \path{results/experiment_b_learned_rssm.json} and \path{results/learned_tiny_rssm.pt};
   \item belief collapse and horizon sweeps: \path{results/experiment_c_belief_collapse.json} and \path{results/experiment_d_horizon_budget.json};
   \item repair, belief intervention, closed-loop, and label-budget studies: \path{results/experiment_e_repairs.json}, \path{results/experiment_j_belief_interventions.json}, \path{results/experiment_f_closed_loop_planning.json}, and \path{results/experiment_g_label_budget_ablation.json};
-  \item OOD and Gymnasium studies: \path{results/experiment_h_ood_stress_grid.json} and \path{results/experiment_i_gymnasium_benchmarks.json};
+  \item OOD and Gymnasium studies: \path{results/experiment_h_ood_stress_grid.json}, \path{results/experiment_i_gymnasium_benchmarks.json}, and \path{results/experiment_k_classic_control_benchmarks.json};
   \item claim and leakage audits: \path{results/claims_status.json} and \path{results/leakage_audit.json}.
 \end{itemize}
 
-The strict multiseed audit reports strong evidence for the controlled latent dynamics family over five seeds: mean raw latent delta \(5.41\), mean raw real delta \(-1.98\), and mean repair improvement \(6.20\). The learned \rssm-style family uses three seeds: mean raw latent delta \(0.96\), mean raw real delta \(-1.64\), and mean repair improvement \(5.30\). The belief-intervention stress adds 20 seed-regime units with raw high-\(N\) harm in \(90\%\) of units and positive posterior-prior diagnostic recovery. These summaries support the qualitative claims while preserving the small-scale scope of the evidence.
+The strict multiseed audit reports strong evidence for the controlled latent dynamics family over five seeds: mean raw latent delta \(5.41\), mean raw real delta \(-1.98\), and mean repair improvement \(6.20\). The learned \rssm-style family uses three seeds: mean raw latent delta \(0.96\), mean raw real delta \(-1.64\), and mean repair improvement \(5.30\). The belief-intervention stress adds 20 seed-regime units with raw high-\(N\) harm in \(90\%\) of units and positive posterior-prior diagnostic recovery. The classic-control tier contributes 3,240 executed Gymnasium rollout records and 18 seed-benchmark effect rows; two of three tasks meet mismatch and repair thresholds, while MountainCar is a declared helpful-boundary case. These summaries support the qualitative claims while preserving the small-scale scope of the evidence.
 
 \section{Leakage Audit and Boundary Cases}
 
 Pilot calibration uses real-utility labels only from the pilot split. Evaluation candidates may be scored by the fitted calibrator, but their labels are used only after scoring for reporting selected utility. The audit verifies zero pilot/evaluation overlap and zero leaked labels for clean runs. A sentinel run deliberately inserts three non-pilot evaluation labels into calibrator provenance; the audit rejects it with reasons that the calibrator labels include non-pilot candidates and that label provenance is not a subset of the pilot split.
 
-Boundary cases are reviewer-facing sanity checks. Constant utility remains constant for every \(N\). Oracle scoring \(S=R\) improves selected utility with \(N\) in the finite pool. Anti-aligned scoring \(S=-R\) worsens selected utility. The OOD grid also includes regimes where raw large-budget selection is neutral or helpful. These cases are important because the paper's claim is conditional on latent-real selected-tail mismatch rather than a blanket statement about selection budgets.
+Boundary cases are reviewer-facing sanity checks. Constant utility remains constant for every \(N\). Oracle scoring \(S=R\) improves selected utility with \(N\) in the finite pool. Anti-aligned scoring \(S=-R\) worsens selected utility. The OOD grid and MountainCar benchmark include regimes where raw large-budget selection is neutral or helpful. These cases are important because the paper's claim is conditional on latent-real selected-tail mismatch rather than a blanket statement about selection budgets.
 
 \end{document}

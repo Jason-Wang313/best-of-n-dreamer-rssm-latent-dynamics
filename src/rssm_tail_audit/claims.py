@@ -60,6 +60,7 @@ def build_claim_status(root: Path) -> dict[str, Any]:
     exp_h = _load(results / "experiment_h_ood_stress_grid.json")
     exp_i = _load(results / "experiment_i_gymnasium_benchmarks.json")
     exp_j = _load(results / "experiment_j_belief_interventions.json")
+    exp_k = _load(results / "experiment_k_classic_control_benchmarks.json")
     leakage = _load(results / "leakage_audit.json")
     multi = _load(results / "multiseed_strong_evidence.json")
     full_multiseed = bool(multi and not multi.get("smoke"))
@@ -312,10 +313,35 @@ def build_claim_status(root: Path) -> dict[str, Any]:
         }
     )
 
+    k_key = exp_k.get("key_result", {}) if exp_k else {}
+    k_strong = bool(
+        exp_k
+        and not exp_k.get("smoke")
+        and k_key.get("selected_tail_mismatch_benchmark_count", 0) >= 2
+        and k_key.get("combined_repair_improvement_benchmark_count", 0) >= 2
+        and k_key.get("raw_high_n_risk_increase_benchmark_count", 0) >= 2
+        and k_key.get("curve_rows", 0) >= 700
+        and k_key.get("rollout_rows", 0) >= 3000
+        and k_key.get("all_splits_eval_disjoint")
+    )
+    if full_multiseed and not k_strong:
+        weak_reasons.append(
+            "classic-control benchmark evidence does not meet two-of-three mismatch, repair, risk, rollout-count, and split-audit thresholds"
+        )
+    claims.append(
+        {
+            "category": "classic-control Gymnasium benchmark claims",
+            "claim": "Three standard Gymnasium classic-control tasks add low-dimensional continuous-dynamics benchmark evidence: raw optimistic latent scoring raises selected latent value/risk in at least two tasks, while RSSM diagnostics improve executed rollout utility under disjoint pilot/eval splits.",
+            "status": _status(k_strong),
+            "evidence_strength": "STRONG" if k_strong else "WEAK",
+            "evidence": "results/experiment_k_classic_control_benchmarks.json; figures/figure11_classic_control_benchmarks.png",
+        }
+    )
+
     claims.append(
         {
             "category": "scope boundary claims",
-            "claim": "The benchmark scope is limited to controlled RSSM-style evidence plus lightweight Gymnasium toy-text benchmarks; it does not claim full Dreamer, broad model-based RL, or robotics validation.",
+            "claim": "The benchmark scope is limited to controlled RSSM-style evidence plus lightweight Gymnasium toy-text and classic-control benchmarks; it does not claim full Dreamer, broad model-based RL, or robotics validation.",
             "status": "SUPPORTED",
             "evidence_strength": "STRONG",
             "evidence": "Repository scope, scripts, and generated benchmark artifacts.",
