@@ -1,30 +1,68 @@
-# Final Audit
+# Final V4 Audit
 
-The repository is designed around reproducible local commands:
+Paper: `best of n dreamer rssm latent dynamics-v4.pdf`
 
-```bash
-bash scripts/run_smoke.sh
-bash scripts/run_all.sh
+Source folder: `C:\Users\wangz\best of n dreamer rssm latent dynamics`
+
+GitHub remote: `https://github.com/Jason-Wang313/best-of-n-dreamer-rssm-latent-dynamics.git`
+
+Verified on: 2026-06-16
+
+## Final Artifact
+
+- Repository PDF: `paper/final/best of n dreamer rssm latent dynamics-v4.pdf`
+- Desktop PDF: `C:\Users\wangz\OneDrive\Desktop\best of n dreamer rssm latent dynamics-v4.pdf`
+- SHA256: `714140FA03923875DC73280EDE476AD531F6F3F945026746C2692B8248E446DD`
+- Page count: 11
+- Repo/Desktop hash match: yes
+
+## Verification Commands
+
+All checks below were run against the v4 source tree and final PDF.
+
+```powershell
+python -m compileall src experiments scripts tests -q
+python -m pytest -q
 bash scripts/run_claim_audit.sh
-pytest
+powershell -ExecutionPolicy Bypass -File paper\build_submission.ps1 -DesktopCopy "C:\Users\wangz\OneDrive\Desktop\best of n dreamer rssm latent dynamics-v4.pdf"
+rg -n "undefined|Citation.*undefined|Reference.*undefined|Rerun to get|Overfull|LaTeX Warning|Package natbib Warning" "paper\main.log"
+pdfinfo "paper\final\best of n dreamer rssm latent dynamics-v4.pdf"
+pdftoppm -png "paper\final\best of n dreamer rssm latent dynamics-v4.pdf" "tmp\pdfs\rssm_v4\page"
 ```
 
-Expected generated artifacts:
+Results:
 
-- `results/selected_tail_estimator_validation.json`
-- `results/experiment_a_toy_mismatch.json`
-- `results/experiment_b_learned_rssm.json`
-- `results/experiment_c_belief_collapse.json`
-- `results/experiment_d_horizon_budget.json`
-- `results/experiment_e_repairs.json`
-- `results/experiment_f_closed_loop_planning.json`
-- `results/experiment_g_label_budget_ablation.json`
-- `results/experiment_h_ood_stress_grid.json`
-- `results/experiment_i_gymnasium_benchmarks.json`
-- `results/experiment_j_belief_interventions.json`
-- `results/experiment_k_classic_control_benchmarks.json`
-- `results/multiseed_strong_evidence.json`
-- `results/claims_status.json`
-- eleven required figures under `figures/`, including `figures/figure10_belief_interventions.png` and `figures/figure11_classic_control_benchmarks.png`
+- Compile check: passed.
+- Unit tests: 19 passed.
+- Claim audit: passed with 0 unsupported claims and 0 weak strong-evidence checks.
+- LaTeX log scan: no unresolved citations, unresolved references, rerun warnings, overfull boxes, or natbib warnings.
+- PDF render: all 11 pages rendered.
+- Visual QA: pages 1, 5, 7, 10, and 11 inspected for layout, citations, tables, figures, clipping, and appendix/provenance readability.
 
-The claim audit is intentionally conservative. Full runs fail if a paper-level claim lacks strong multi-seed support, if a forbidden overclaim appears in docs or paper files, or if any claim is unsupported.
+## Evidence Scope
+
+The v4 paper is scoped as an RSSM-style belief-tail audit paper, not a generic Best-of-N wrapper. Its evidence includes:
+
+- finite selected-tail estimator validation;
+- controlled hidden-mode latent-real mismatch;
+- a CPU-trained small RSSM-style model with encoder, recurrent state, stochastic prior/posterior, decoder, reward head, and value head;
+- belief-collapse and posterior-prior drift interventions;
+- horizon and candidate-budget stress sweeps;
+- RSSM-aware repair comparisons against raw, oracle, and diagnostic baselines;
+- receding-horizon closed-loop planning;
+- label-budget repair ablations with leakage audit;
+- OOD stress-grid analysis;
+- three Gymnasium toy-text benchmarks;
+- three standard Gymnasium classic-control tasks: CartPole-v1, MountainCar-v0, and Acrobot-v1.
+
+## Claim Gates
+
+The claim ledger reports:
+
+- Unsupported count: 0.
+- Weak strong-evidence checks: 0.
+- Full multi-seed evidence: true.
+- Standard benchmark scope: limited to lightweight Gymnasium toy-text and classic-control tasks.
+- Explicit non-claims: no full Dreamer validation, no broad model-based RL coverage, and no robotics validation.
+
+Forbidden overclaims are blocked by the claim audit, including universal statements about Dreamer/model-based RL and real-robot validation.
