@@ -6,13 +6,13 @@ Source folder: `C:\Users\wangz\best of n dreamer rssm latent dynamics`
 
 GitHub remote: `https://github.com/Jason-Wang313/best-of-n-dreamer-rssm-latent-dynamics.git`
 
-Verified on: 2026-06-16
+Verified on: 2026-06-19
 
 ## Final Artifact
 
 - Repository PDF: `paper/final/best of n dreamer rssm latent dynamics-v4.pdf`
 - Desktop PDF: `C:\Users\wangz\OneDrive\Desktop\best of n dreamer rssm latent dynamics-v4.pdf`
-- SHA256: `714140FA03923875DC73280EDE476AD531F6F3F945026746C2692B8248E446DD`
+- SHA256: `190019F7906D9DD5A91C57F4CC4738DF5816FB35CB940350A2BB9621892FDB0E`
 - Page count: 11
 - Repo/Desktop hash match: yes
 
